@@ -1,0 +1,39 @@
+---
+import '@/styles/global.css';
+import { AuthHydrator } from '@/components/shared/AuthHydrator';
+import { Nav } from '@/components/shared/Nav';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Trusted Gemological Laboratory — certificates, points, and rewards.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap"
+    />
+    <meta name="description" content={description} />
+    <title>{title} · Trusted Gemlab</title>
+  </head>
+  <body class="min-h-screen bg-bg text-text">
+    <AuthHydrator client:load />
+    <Nav client:load />
+    <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <slot />
+    </main>
+    <footer class="mx-auto max-w-5xl px-4 py-10 text-center text-xs text-text-secondary sm:px-6">
+      Trusted Gemological Laboratory
+    </footer>
+  </body>
+</html>

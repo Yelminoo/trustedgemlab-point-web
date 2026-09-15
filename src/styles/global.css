@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/*
+ * Brand tokens — must match mobile-point/web-internal exactly: primary
+ * #8d1b20 / hover #6d1518, Geist Sans for UI text, Geist Mono for
+ * certificate numbers and other technical fields. This file is the single
+ * source of truth for those tokens on web — don't hardcode #8d1b20
+ * elsewhere, use the Tailwind classes these tokens generate (bg-primary,
+ * text-primary, etc.)
+ */
+@theme {
+  --color-primary: #8d1b20;
+  --color-primary-pressed: #6d1518;
+  --color-on-primary: #ffffff;
+  --color-danger: #dc2626;
+
+  --color-bg: #ffffff;
+  --color-bg-element: #f0f0f3;
+  --color-bg-selected: #e0e1e6;
+  --color-text: #000000;
+  --color-text-secondary: #60646c;
+  --color-border: #8d1b20;
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-danger: #f87171;
+    --color-bg: #000000;
+    --color-bg-element: #212225;
+    --color-bg-selected: #2e3135;
+    --color-text: #ffffff;
+    --color-text-secondary: #b0b4ba;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-danger: #f87171;
+  --color-bg: #000000;
+  --color-bg-element: #212225;
+  --color-bg-selected: #2e3135;
+  --color-text: #ffffff;
+  --color-text-secondary: #b0b4ba;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
