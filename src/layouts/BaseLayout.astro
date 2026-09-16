@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from 'astro:transitions';
+
 import '@/styles/global.css';
 import { AuthHydrator } from '@/components/shared/AuthHydrator';
 import { Nav } from '@/components/shared/Nav';
@@ -16,6 +18,25 @@ const { title, description = 'Trusted Gemological Laboratory — certificates, p
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Blocking + is:inline so this runs before first paint, applying any
+      explicit saved theme choice before the browser renders anything — the
+      alternative (setting it from a React effect after hydration) would
+      flash the OS-default theme first whenever it differs from the user's
+      saved choice. `<html>` itself is never replaced by ClientRouter page
+      transitions, so this only needs to run once per hard load, not per
+      transition — see ThemeToggle.tsx for the reactive/toggle half of this.
+    -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('tgl-theme');
+          if (saved === 'light' || saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', saved);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,10 +46,20 @@ const { title, description = 'Trusted Gemological Laboratory — certificates, p
     />
     <meta name="description" content={description} />
     <title>{title} · Trusted Gemlab</title>
+    <ClientRouter />
   </head>
   <body class="min-h-screen bg-bg text-text">
-    <AuthHydrator client:load />
-    <Nav client:load />
+    <!--
+      transition:persist keeps these two islands' actual DOM nodes (and their
+      live React state) across a same-origin navigation instead of Astro
+      tearing them down and remounting fresh copies from the new page — that
+      remount-on-every-link-click was the "nav bar reloading" bug. An
+      explicit transition:name pins the match instead of relying on Astro's
+      default (same tag + position) matching, which is the documented
+      best-practice when the persisted element has no other stable id.
+    -->
+    <AuthHydrator client:load transition:persist transition:name="auth-hydrator" />
+    <Nav client:load transition:persist transition:name="site-nav" />
     <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <slot />
     </main>

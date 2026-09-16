@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { ThemeToggle } from '@/components/shared/ThemeToggle';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
 const links = [
@@ -50,16 +51,17 @@ export function Nav() {
               Sign In
             </a>
           )}
+          <ThemeToggle />
         </nav>
 
-        <button
-          className="rounded-lg p-2 text-text sm:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+        <div className="flex items-center gap-1 sm:hidden">
+          <ThemeToggle />
+          <button className="rounded-lg p-2 text-text" onClick={() => setOpen((v) => !v)} aria-label="Toggle menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {open && (
