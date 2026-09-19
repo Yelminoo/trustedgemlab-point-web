@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import FacetedGem from '@/components/landing/FacetedGem.astro';
+import HeroLogo from '@/components/landing/HeroLogo.astro';
 import FeatureIcon from '@/components/landing/FeatureIcon.astro';
 import { LandingGate } from '@/components/landing/LandingGate';
 
@@ -10,8 +10,8 @@ import { LandingGate } from '@/components/landing/LandingGate';
 // by two different pitches for the same four features.
 const features = [
   {
-    title: 'Search & Scan Certificates',
-    body: "Look up your certificates by number, or scan a certificate's QR code directly.",
+    title: 'Search & Scan Reports',
+    body: "Look up your reports by number, or scan a report's QR code directly.",
     icon: 'search' as const,
   },
   {
@@ -25,8 +25,8 @@ const features = [
     icon: 'card' as const,
   },
   {
-    title: 'Request Free Certificates',
-    body: 'Once you have enough points, redeem them for a free certificate right from the app.',
+    title: 'Request Free Reports',
+    body: 'Once you have enough points, redeem them for a free gem report right from the app.',
     icon: 'gift' as const,
   },
 ];
@@ -35,7 +35,7 @@ const steps = [
   {
     n: '01',
     title: 'Sign up or log in',
-    body: 'Create your free member account to start earning points and requesting certificates.',
+    body: 'Create your free member account to start earning points and requesting reports.',
   },
   { n: '02', title: 'Earn points', body: 'Get your stones certified, get rewarded automatically.' },
   { n: '03', title: 'Redeem anytime', body: 'Trade points for a free gem report whenever you’re ready.' },
@@ -70,11 +70,11 @@ const steps = [
         <h1
           class="animate-fade-up font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl lg:text-[4rem]"
           style="animation-delay: 60ms">
-          Every certificate tells a story of trust.
+          Every gem report tells a story of trust.
         </h1>
 
         <p class="animate-fade-up mt-6 max-w-md text-base leading-relaxed text-text-secondary sm:text-lg" style="animation-delay: 140ms">
-          Verify, track, and earn rewards on your gemstone certificates — all in one place.
+          Verify, track, and earn rewards on your gemstone reports — all in one place.
         </p>
 
         <div class="animate-fade-up mt-9 flex flex-col gap-3 sm:flex-row" style="animation-delay: 220ms">
@@ -96,7 +96,7 @@ const steps = [
       </div>
 
       <div class="animate-fade-up flex justify-center lg:justify-end" style="animation-delay: 160ms">
-        <FacetedGem />
+        <HeroLogo />
       </div>
     </div>
   </section>

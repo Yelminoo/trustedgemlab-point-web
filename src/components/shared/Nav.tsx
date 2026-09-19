@@ -5,7 +5,7 @@ import { useAuthStore } from '@/lib/stores/auth-store';
 
 const links = [
   { href: '/dashboard', label: 'Home' },
-  { href: '/certificates', label: 'Certificates' },
+  { href: '/reports', label: 'Reports' },
   { href: '/redeem', label: 'Redeem' },
 ];
 
@@ -29,7 +29,7 @@ export function Nav() {
   const pathname = usePathname();
   const isAdmin = customer?.isAdmin ?? false;
   // Signed-out visitors only ever see the marketing landing page and
-  // sign-in — there's nothing behind Certificates/Redeem/Admin for them to
+  // sign-in — there's nothing behind Reports/Redeem/Admin for them to
   // go to, so showing those links would just bounce them back to /.
   const showAppLinks = hydrated && !!customer;
 
@@ -41,9 +41,12 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-bg-selected bg-bg/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
-        <a href="/" className="flex items-baseline gap-1.5">
-          <span className="font-mono text-lg font-bold text-primary">Trusted</span>
-          <span className="hidden text-xs text-text-secondary sm:inline">Gemological Laboratory</span>
+        <a href="/" className="flex items-center gap-2">
+          <img src="/logo.svg" alt="" className="size-7" />
+          <span className="flex items-baseline gap-1.5">
+            <span className="font-mono text-lg font-bold text-primary">Trusted</span>
+            <span className="hidden text-xs text-text-secondary sm:inline">Gemological Laboratory</span>
+          </span>
         </a>
 
         <nav className="hidden items-center gap-6 sm:flex">

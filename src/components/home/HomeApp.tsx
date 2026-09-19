@@ -100,9 +100,9 @@ function ScanView({ accessToken }: { accessToken: string | null }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {notFound && <p className="text-center text-sm text-danger">Certificate not found for scanned code "{scannedCertNo}".</p>}
+      {notFound && <p className="text-center text-sm text-danger">Report not found for scanned code "{scannedCertNo}".</p>}
       {error && !notFound && <p className="text-center text-sm text-danger">{error.message}</p>}
-      {certificate && <p className="text-center text-sm font-semibold text-primary">✓ This certificate is yours</p>}
+      {certificate && <p className="text-center text-sm font-semibold text-primary">✓ This report is yours</p>}
       {certificate && <CertificateCard certificate={certificate} />}
       <Button onClick={() => setScannedCertNo('')}>Scan Another</Button>
     </div>

@@ -22,7 +22,7 @@ function CertificatesInner() {
   return (
     <div className="mx-auto flex max-w-md flex-col gap-8">
       <div>
-        <h1 className="mb-3 text-lg font-semibold">Find a certificate</h1>
+        <h1 className="mb-3 text-lg font-semibold">Find a report</h1>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -30,7 +30,7 @@ function CertificatesInner() {
           }}
           className="flex gap-2">
           <div className="flex-1">
-            <TextField value={certNo} onChange={(e) => setCertNo(e.target.value)} placeholder="Certificate number" />
+            <TextField value={certNo} onChange={(e) => setCertNo(e.target.value)} placeholder="Report number" />
           </div>
           <Button type="submit" disabled={!certNo.trim() || isFetching}>
             {isFetching ? '…' : 'Search'}
@@ -39,7 +39,7 @@ function CertificatesInner() {
 
         {searched && (
           <div className="mt-4">
-            {notFound && <p className="text-sm text-danger">Certificate not found for "{searched}".</p>}
+            {notFound && <p className="text-sm text-danger">Report not found for "{searched}".</p>}
             {error && !notFound && <p className="text-sm text-danger">{error.message}</p>}
             {found && <CertificateCard certificate={found} />}
           </div>
@@ -47,11 +47,11 @@ function CertificatesInner() {
       </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-semibold">My Certificates</h2>
+        <h2 className="mb-3 text-lg font-semibold">My Reports</h2>
         {!mine ? (
           <p className="text-sm text-text-secondary">Loading…</p>
         ) : mine.certificates.length === 0 ? (
-          <p className="text-sm text-text-secondary">No certificates yet.</p>
+          <p className="text-sm text-text-secondary">No reports yet.</p>
         ) : (
           <div className="flex flex-col gap-3">
             {mine.certificates.map((c) => (

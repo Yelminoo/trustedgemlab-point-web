@@ -71,7 +71,7 @@ export function MemberDetail({ memberDbId, accessToken }: { memberDbId: number; 
         </div>
         <p className="font-mono text-xl font-semibold text-primary">{(detail.wallet?.balance ?? 0).toLocaleString()} pts</p>
         <p className="text-sm text-text-secondary">
-          Lifetime earned: {(detail.wallet?.lifetimeEarned ?? 0).toLocaleString()} · Free cert cost: {detail.effectiveFreeCertificateCost} pts
+          Lifetime earned: {(detail.wallet?.lifetimeEarned ?? 0).toLocaleString()} · Free report cost: {detail.effectiveFreeCertificateCost} pts
         </p>
 
         <div className="flex overflow-hidden rounded-xl border border-border">

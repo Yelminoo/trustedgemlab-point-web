@@ -21,7 +21,7 @@ export function ActivityLogView({ accessToken }: { accessToken: string | null })
               <p className="text-sm text-text-secondary">
                 {entry.kind === 'points'
                   ? entry.note
-                  : `Free certificate request ${entry.status}${entry.adminNote ? ` — "${entry.adminNote}"` : ''}`}
+                  : `Free report request ${entry.status}${entry.adminNote ? ` — "${entry.adminNote}"` : ''}`}
               </p>
               <p className="text-xs text-text-secondary">{new Date(entry.createdAt).toLocaleString()}</p>
             </div>

@@ -31,7 +31,7 @@ export function FreeCertificateRequestSection({ balance, cost, accessToken }: { 
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-text-secondary">Redeem {cost.toLocaleString()} pts for a free certificate</p>
+      <p className="text-sm text-text-secondary">Redeem {cost.toLocaleString()} pts for a free gem report</p>
 
       {hasPending && <p className="text-sm text-text-secondary">You already have a request pending review.</p>}
       {!hasPending && balance < cost && (
@@ -40,7 +40,7 @@ export function FreeCertificateRequestSection({ balance, cost, accessToken }: { 
       <ErrorText>{error}</ErrorText>
 
       <Button onClick={handleRequest} disabled={!canRequest || submitting} className="mt-1">
-        {submitting ? 'Requesting…' : 'Request Free Certificate'}
+        {submitting ? 'Requesting…' : 'Request Free Report'}
       </Button>
 
       {requests.length > 0 && (
