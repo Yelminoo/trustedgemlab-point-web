@@ -144,11 +144,16 @@ const steps = [
       </div>
 
       <div class="flex justify-center">
-        <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-90" role="presentation">
-          <rect x="8" y="8" width="104" height="104" rx="26" fill="none" stroke="white" stroke-width="2" stroke-dasharray="6 7" opacity="0.5" />
-          <rect x="30" y="30" width="60" height="60" rx="16" fill="white" opacity="0.12" />
-          <image href="/logo.svg" x="42" y="42" width="36" height="36" />
-          <path d="M60 96v14m0 0-7-7m7 7 7-7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" />
+        <svg width="120" height="120" viewBox="0 0 120 120" class="animate-pop-in drop-shadow-2xl" role="presentation">
+          <rect x="8" y="8" width="104" height="104" rx="26" fill="none" stroke="white" stroke-width="2" stroke-dasharray="6 7" opacity="0.7" />
+          <!-- solid white tile (not a faint tint) so the logo reads with
+               real contrast against the red backdrop, like an actual
+               home-screen icon rather than a ghosted diagram -->
+          <rect x="28" y="28" width="64" height="64" rx="18" fill="white" />
+          <image href="/logo.svg" x="40" y="40" width="40" height="40" />
+          <g class="animate-bob">
+            <path d="M60 100v16m0 0-7-7m7 7 7-7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
         </svg>
       </div>
     </div>
