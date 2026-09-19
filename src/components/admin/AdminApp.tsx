@@ -5,8 +5,9 @@ import { ActivityLogView } from '@/components/admin/ActivityLogView';
 import { MembersView } from '@/components/admin/MembersView';
 import { NotifyView } from '@/components/admin/NotifyView';
 import { RequestsView } from '@/components/admin/RequestsView';
+import { GateLoading } from '@/components/shared/GateLoading';
 import { getQueryClient } from '@/lib/query-client';
-import { useAuthStore } from '@/lib/stores/auth-store';
+import { useAuthGate } from '@/lib/use-auth-gate';
 
 type View = 'members' | 'requests' | 'activity' | 'notify';
 const TABS: { key: View; label: string }[] = [
@@ -17,13 +18,15 @@ const TABS: { key: View; label: string }[] = [
 ];
 
 function AdminInner() {
-  const { customer, accessToken, hydrated } = useAuthStore();
+  const { customer, accessToken, ready } = useAuthGate();
   const [view, setView] = useState<View>('members');
-  const isAdmin = customer?.isAdmin ?? false;
 
-  if (!hydrated) return <div className="h-40" />;
+  if (!ready || !customer) return <GateLoading />;
 
-  if (!isAdmin) {
+  // Signed in, but not an admin — this is an authorization message, not a
+  // redirect: unlike "not signed in at all" (handled by useAuthGate above),
+  // this person IS legitimately signed in, just not for this page.
+  if (!customer.isAdmin) {
     return <p className="text-center text-sm text-text-secondary">This isn't available on your account.</p>;
   }
 

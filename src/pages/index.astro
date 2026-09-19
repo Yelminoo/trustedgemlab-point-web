@@ -1,8 +1,168 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { HomeApp } from '@/components/home/HomeApp';
+import FacetedGem from '@/components/landing/FacetedGem.astro';
+import FeatureIcon from '@/components/landing/FeatureIcon.astro';
+import { LandingGate } from '@/components/landing/LandingGate';
+
+// Copy deliberately mirrors mobile-point's own onboarding carousel
+// (src/i18n/locales/en.json, "onboarding" keys) — same product, same
+// voice, so a customer moving between the app and this site isn't greeted
+// by two different pitches for the same four features.
+const features = [
+  {
+    title: 'Search & Scan Certificates',
+    body: "Look up your certificates by number, or scan a certificate's QR code directly.",
+    icon: 'search' as const,
+  },
+  {
+    title: 'Track Your Points',
+    body: 'Watch your points balance grow and see every credit and debit in your history.',
+    icon: 'points' as const,
+  },
+  {
+    title: 'Your Member Card',
+    body: "Show your Member QR to staff for a quick lookup — it's always right there in your dashboard.",
+    icon: 'card' as const,
+  },
+  {
+    title: 'Request Free Certificates',
+    body: 'Once you have enough points, redeem them for a free certificate right from the app.',
+    icon: 'gift' as const,
+  },
+];
+
+const steps = [
+  {
+    n: '01',
+    title: 'Sign up or log in',
+    body: 'Create your free member account to start earning points and requesting certificates.',
+  },
+  { n: '02', title: 'Earn points', body: 'Get your stones certified, get rewarded automatically.' },
+  { n: '03', title: 'Redeem anytime', body: 'Trade points for a free gem report whenever you’re ready.' },
+];
 ---
 
-<BaseLayout title="Home" description="Your Trusted Gemlab points, member card, and rewards.">
-  <HomeApp client:load />
+<BaseLayout
+  title="Trusted Gemological Laboratory"
+  description="Certify, track, and redeem — the member app for Trusted Gemological Laboratory."
+  fullBleed>
+  <LandingGate client:load />
+
+  <!-- ===== Hero ===== -->
+  <section class="relative overflow-hidden">
+    <!-- Full-bleed atmosphere: a faint radial wash of the brand color, not a
+         flat panel — gives the section depth without introducing a new
+         background token that would drift from the app's strict brand
+         colors elsewhere. -->
+    <div
+      class="pointer-events-none absolute inset-0 -z-10"
+      style="background: radial-gradient(ellipse 80% 60% at 50% -10%, color-mix(in oklab, var(--color-primary) 16%, transparent), transparent)"
+    >
+    </div>
+
+    <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-14 pb-20 sm:px-6 sm:pt-20 sm:pb-28 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+      <div>
+        <p class="animate-fade-up mb-5 flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-primary uppercase" style="animation-delay: 0ms">
+          <span class="inline-block size-1.5 rounded-full bg-primary"></span>
+          Trusted Gemological Laboratory
+        </p>
+
+        <h1
+          class="animate-fade-up font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl lg:text-[4rem]"
+          style="animation-delay: 60ms">
+          Every certificate tells a story of trust.
+        </h1>
+
+        <p class="animate-fade-up mt-6 max-w-md text-base leading-relaxed text-text-secondary sm:text-lg" style="animation-delay: 140ms">
+          Verify, track, and earn rewards on your gemstone certificates — all in one place.
+        </p>
+
+        <div class="animate-fade-up mt-9 flex flex-col gap-3 sm:flex-row" style="animation-delay: 220ms">
+          <a
+            href="/account?mode=register"
+            class="inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-6 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-pressed">
+            Get Started
+          </a>
+          <a
+            href="/account"
+            class="inline-flex min-h-12 items-center justify-center rounded-xl border border-border px-6 text-sm font-semibold text-text transition-colors hover:bg-bg-element">
+            Sign In
+          </a>
+        </div>
+
+        <p class="animate-fade-up mt-8 text-xs tracking-[0.15em] text-text-secondary uppercase" style="animation-delay: 300ms">
+          Gemological Certification &nbsp;·&nbsp; Member Rewards &nbsp;·&nbsp; Digital Verification
+        </p>
+      </div>
+
+      <div class="animate-fade-up flex justify-center lg:justify-end" style="animation-delay: 160ms">
+        <FacetedGem />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features ===== -->
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <div class="mb-10 max-w-lg">
+      <h2 class="font-display text-3xl font-semibold sm:text-4xl">Everything your membership needs</h2>
+      <p class="mt-3 text-text-secondary">One account for verifying stones and being rewarded for it.</p>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      {
+        features.map((f) => (
+          <div class="group rounded-2xl border border-bg-selected/60 bg-bg-element p-6 transition-transform hover:-translate-y-0.5">
+            <div class="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <FeatureIcon name={f.icon} />
+            </div>
+            <h3 class="mb-1.5 text-base font-semibold">{f.title}</h3>
+            <p class="text-sm leading-relaxed text-text-secondary">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ===== How it works ===== -->
+  <section class="border-y border-bg-selected/60 bg-bg-element/50">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+      <h2 class="font-display mb-10 text-3xl font-semibold sm:text-4xl">How it works</h2>
+      <div class="grid gap-8 sm:grid-cols-3 sm:gap-6">
+        {
+          steps.map((s, i) => (
+            <div class="relative">
+              <span class="font-mono text-sm text-primary/60">{s.n}</span>
+              <h3 class="mt-2 mb-1.5 text-base font-semibold">{s.title}</h3>
+              <p class="text-sm leading-relaxed text-text-secondary">{s.body}</p>
+              {i < steps.length - 1 && (
+                <span class="pointer-events-none absolute top-2 -right-3 hidden text-text-secondary/30 sm:block">→</span>
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Final CTA ===== -->
+  <section class="relative overflow-hidden bg-primary">
+    <div
+      class="pointer-events-none absolute inset-0 z-0 opacity-[0.08]"
+      style="background-image: radial-gradient(circle at 20% 30%, white 0, transparent 45%), radial-gradient(circle at 80% 70%, white 0, transparent 40%)"
+    >
+    </div>
+    <div class="relative mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
+      <h2 class="font-display text-3xl font-semibold text-on-primary sm:text-4xl">
+        Ready to see what your stones are worth?
+      </h2>
+      <p class="mx-auto mt-3 max-w-sm text-sm text-on-primary/80">
+        Create your free member account and start earning points today.
+      </p>
+      <a
+        href="/account?mode=register"
+        class="mt-8 inline-flex min-h-12 items-center justify-center rounded-xl bg-on-primary px-7 text-sm font-semibold text-primary transition-opacity hover:opacity-90">
+        Create your account
+      </a>
+    </div>
+  </section>
 </BaseLayout>

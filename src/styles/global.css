@@ -23,6 +23,11 @@
 
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
+  /* Landing-page display headlines only (see LandingPage) — a warm,
+     high-contrast serif to give the certification-house tone real
+     character, distinct from Geist Sans everywhere else so it stays a
+     deliberate accent instead of diluting the app's own type identity. */
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,4 +54,39 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+}
+
+/* Landing-page hero motion — a single staggered reveal on load (each
+   element's own `animation-delay`, set via inline style/Tailwind arbitrary
+   values where used) plus a slow light-sweep across the facet graphic,
+   evoking light catching a cut gemstone. Disabled entirely under
+   prefers-reduced-motion, per WCAG 2.3.3 — content stays fully visible
+   either way since the animation only affects opacity/transform, never
+   display. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes gem-sweep {
+    from {
+      transform: translateX(-140%) skewX(-12deg);
+    }
+    to {
+      transform: translateX(240%) skewX(-12deg);
+    }
+  }
+  .animate-fade-up {
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .animate-gem-sweep {
+    animation: gem-sweep 3.2s ease-in-out infinite;
+    animation-delay: 1.1s;
+  }
 }

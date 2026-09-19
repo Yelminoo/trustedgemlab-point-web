@@ -1,4 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
+import { navigate } from 'astro:transitions/client';
 import { useState } from 'react';
 
 import { loginCustomer, registerCustomer } from '@/lib/api/auth';
@@ -13,7 +14,14 @@ import { useAuthStore } from '@/lib/stores/auth-store';
 
 function AccountInner() {
   const { customer, accessToken, hydrated, setSession, updateCustomer, logout } = useAuthStore();
-  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login');
+  // The landing page's "Get Started" CTA links here with ?mode=register so
+  // a new visitor lands straight on the signup form instead of login-first;
+  // "Sign In" links here with no param, keeping the existing default.
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>(() =>
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('mode') === 'register'
+      ? 'register'
+      : 'login'
+  );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -29,6 +37,11 @@ function AccountInner() {
         mode === 'login' ? await loginCustomer(email.trim(), password) : await registerCustomer(email.trim(), password);
       setSession(result.customer, result.accessToken);
       setPassword('');
+      // Landing into the dashboard right after signing in (rather than
+      // staying on /account) matches what the gate does everywhere else —
+      // /account itself stays reachable afterward from the nav for
+      // profile/settings, it's just not where a fresh sign-in should land.
+      navigate('/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {

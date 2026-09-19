@@ -7,30 +7,20 @@ import { useWallet } from '@/lib/api/wallet';
 import { CertificateCard } from '@/components/shared/CertificateCard';
 import { FreeCertificateRequestSection } from '@/components/home/FreeCertificateRequestSection';
 import { MemberCard } from '@/components/home/MemberCard';
+import { GateLoading } from '@/components/shared/GateLoading';
 import { QrScanner } from '@/components/shared/QrScanner';
-import { Button, Card } from '@/components/shared/ui';
+import { Button } from '@/components/shared/ui';
 import { getQueryClient } from '@/lib/query-client';
-import { useAuthStore } from '@/lib/stores/auth-store';
+import { useAuthGate } from '@/lib/use-auth-gate';
 
 type View = 'dashboard' | 'scan' | 'card' | 'redeem';
 
 function HomeInner() {
-  const { customer, accessToken, hydrated } = useAuthStore();
+  const { customer, accessToken, ready } = useAuthGate();
   const [view, setView] = useState<View>('dashboard');
   const { data: wallet } = useWallet(accessToken);
 
-  if (!hydrated) return <div className="h-40" />;
-
-  if (!customer) {
-    return (
-      <Card className="mx-auto max-w-md text-center">
-        <p className="mb-3 text-sm text-text-secondary">Sign in to see your points</p>
-        <a href="/account" className="inline-block rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-on-primary">
-          Go to Account
-        </a>
-      </Card>
-    );
-  }
+  if (!ready || !customer) return <GateLoading />;
 
   if (view !== 'dashboard') {
     const titles: Record<Exclude<View, 'dashboard'>, string> = { scan: 'Scan QR', card: 'Member Card', redeem: 'Free GEM Report' };

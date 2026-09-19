@@ -4,30 +4,20 @@ import { useState } from 'react';
 import { ApiError } from '@/lib/api/client';
 import { useCertificateLookup, useMyCertificates } from '@/lib/api/certificates';
 import { CertificateCard } from '@/components/shared/CertificateCard';
-import { Button, Card, TextField } from '@/components/shared/ui';
+import { GateLoading } from '@/components/shared/GateLoading';
+import { Button, TextField } from '@/components/shared/ui';
 import { getQueryClient } from '@/lib/query-client';
-import { useAuthStore } from '@/lib/stores/auth-store';
+import { useAuthGate } from '@/lib/use-auth-gate';
 
 function CertificatesInner() {
-  const { customer, accessToken, hydrated } = useAuthStore();
+  const { customer, accessToken, ready } = useAuthGate();
   const [certNo, setCertNo] = useState('');
   const [searched, setSearched] = useState('');
   const { data: found, error, isFetching } = useCertificateLookup(searched, accessToken);
   const { data: mine } = useMyCertificates(accessToken);
   const notFound = error instanceof ApiError && error.status === 404;
 
-  if (!hydrated) return <div className="h-40" />;
-
-  if (!customer) {
-    return (
-      <Card className="mx-auto max-w-md text-center">
-        <p className="mb-3 text-sm text-text-secondary">Sign in to look up your certificates.</p>
-        <a href="/account" className="inline-block rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-on-primary">
-          Go to Account
-        </a>
-      </Card>
-    );
-  }
+  if (!ready || !customer) return <GateLoading />;
 
   return (
     <div className="mx-auto flex max-w-md flex-col gap-8">

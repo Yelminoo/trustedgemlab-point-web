@@ -5,7 +5,7 @@ import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode } from 'react
 // deliberately minimal — this app doesn't need a full component library.
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-2xl bg-bg-element p-6 ${className}`}>{children}</div>;
+  return <div className={`rounded-2xl border border-bg-selected/60 bg-bg-element p-5 sm:p-6 ${className}`}>{children}</div>;
 }
 
 export function Button({
@@ -14,7 +14,12 @@ export function Button({
   children,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'danger' }) {
-  const base = 'rounded-xl px-4 py-2.5 font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+  // min-h-11 (44px) meets the WCAG 2.5.8 / iOS-HIG minimum touch-target size
+  // — buttons this app already had were comfortably close but not
+  // guaranteed at every viewport, so it's made explicit here once rather
+  // than trusted to padding + font-size at each call site.
+  const base =
+    'inline-flex min-h-11 items-center justify-center rounded-xl px-4 py-2.5 font-medium text-sm transition-colors active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed';
   const variants = {
     primary: 'bg-primary text-on-primary hover:bg-primary-pressed',
     secondary: 'bg-bg-selected text-text hover:opacity-80',
@@ -32,7 +37,7 @@ export function TextField({ label, className = '', ...props }: InputHTMLAttribut
     <label className="flex flex-col gap-1.5">
       {label && <span className="text-sm font-medium text-text-secondary">{label}</span>}
       <input
-        className={`w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-sm text-text outline-none focus:ring-2 focus:ring-primary/30 ${className}`}
+        className={`min-h-11 w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-base text-text outline-none focus:ring-2 focus:ring-primary/30 sm:text-sm ${className}`}
         {...props}
       />
     </label>
