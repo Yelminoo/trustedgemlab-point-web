@@ -44,6 +44,28 @@ export function TextField({ label, className = '', ...props }: InputHTMLAttribut
   );
 }
 
+export function Checkbox({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label: ReactNode;
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-2.5 text-sm">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="mt-0.5 size-[18px] shrink-0 accent-primary"
+      />
+      <span className="text-text-secondary">{label}</span>
+    </label>
+  );
+}
+
 export function ErrorText({ children }: { children: ReactNode }) {
   if (!children) return null;
   return <p className="text-sm text-danger">{children}</p>;

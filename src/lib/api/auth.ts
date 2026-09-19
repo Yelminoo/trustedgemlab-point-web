@@ -3,6 +3,8 @@ import { apiPost } from '@/lib/api/client';
 export interface CustomerUser {
   id: number;
   email: string;
+  name: string | null;
+  phone: string | null;
   // Grants real admin access through THIS SAME session — there is no
   // separate admin login. The backend checks this flag (via a DB lookup, not
   // the JWT payload) on every /admin/* request.
@@ -18,8 +20,14 @@ export interface AuthResult {
   customer: CustomerUser;
 }
 
-export function registerCustomer(email: string, password: string): Promise<AuthResult> {
-  return apiPost('/customer/register', { email, password });
+export function registerCustomer(
+  email: string,
+  password: string,
+  name: string,
+  phone: string | null,
+  dataConsent: boolean
+): Promise<AuthResult> {
+  return apiPost('/customer/register', { email, password, name, phone: phone || undefined, dataConsent });
 }
 
 export function loginCustomer(email: string, password: string): Promise<AuthResult> {
