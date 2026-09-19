@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HeroLogo from '@/components/landing/HeroLogo.astro';
 import FeatureIcon from '@/components/landing/FeatureIcon.astro';
+import { InstallCta } from '@/components/install/InstallCta';
 import { LandingGate } from '@/components/landing/LandingGate';
 
 // Copy deliberately mirrors mobile-point's own onboarding carousel
@@ -120,6 +121,36 @@ const steps = [
           </div>
         ))
       }
+    </div>
+  </section>
+
+  <!-- ===== Install ===== -->
+  <section class="relative overflow-hidden bg-primary">
+    <div
+      class="pointer-events-none absolute inset-0 opacity-[0.08]"
+      style="background-image: radial-gradient(circle at 15% 20%, white 0, transparent 40%), radial-gradient(circle at 85% 80%, white 0, transparent 35%)"
+    >
+    </div>
+    <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1fr_auto] lg:gap-16">
+      <div class="text-center lg:text-left">
+        <h2 class="font-display text-3xl font-semibold text-on-primary sm:text-4xl">Install the app</h2>
+        <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-on-primary/80 lg:mx-0">
+          Add Trusted Gemlab to your home screen for one-tap access, a full-screen app-like experience, and quick
+          lookups even with a spotty connection.
+        </p>
+        <div class="mt-7 flex justify-center lg:justify-start">
+          <InstallCta client:load />
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-90" role="presentation">
+          <rect x="8" y="8" width="104" height="104" rx="26" fill="none" stroke="white" stroke-width="2" stroke-dasharray="6 7" opacity="0.5" />
+          <rect x="30" y="30" width="60" height="60" rx="16" fill="white" opacity="0.12" />
+          <image href="/logo.svg" x="42" y="42" width="36" height="36" />
+          <path d="M60 96v14m0 0-7-7m7 7 7-7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" />
+        </svg>
+      </div>
     </div>
   </section>
 

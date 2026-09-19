@@ -3,7 +3,6 @@ import { ClientRouter } from 'astro:transitions';
 
 import '@/styles/global.css';
 import { AuthHydrator } from '@/components/shared/AuthHydrator';
-import { InstallBanner } from '@/components/install/InstallBanner';
 import { Nav } from '@/components/shared/Nav';
 
 interface Props {
@@ -82,14 +81,11 @@ const {
     -->
     <AuthHydrator client:load transition:persist transition:name="auth-hydrator" />
     <Nav client:load transition:persist transition:name="site-nav" />
-    <InstallBanner client:load transition:persist transition:name="install-banner" />
     <main class={fullBleed ? '' : 'mx-auto max-w-5xl px-4 py-8 sm:px-6'}>
       <slot />
     </main>
     <footer class="mx-auto max-w-5xl px-4 py-10 text-center text-xs text-text-secondary sm:px-6">
       Trusted Gemological Laboratory
-      <br />
-      <a href="/install" class="underline">Install this app</a>
     </footer>
 
     <!-- Registered after `load` so it never competes with the page's own
