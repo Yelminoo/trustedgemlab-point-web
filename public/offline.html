@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>You're offline · Trusted Gemlab</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 12px;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: #ffffff;
+        color: #000000;
+        text-align: center;
+        padding: 24px;
+      }
+      img {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 8px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0;
+      }
+      p {
+        color: #60646c;
+        font-size: 14px;
+        margin: 0;
+        max-width: 320px;
+      }
+      button {
+        margin-top: 12px;
+        border: none;
+        background: #8d1b20;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="/logo.svg" alt="" />
+    <h1>You're offline</h1>
+    <p>This page needs a connection to Trusted Gemlab's servers. Reconnect and try again.</p>
+    <button onclick="location.reload()">Retry</button>
+  </body>
+</html>

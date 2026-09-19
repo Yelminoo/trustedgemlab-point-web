@@ -1,0 +1,79 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { InstallPromptButton } from '@/components/install/InstallPromptButton';
+
+const androidSteps = [
+  'Open this site in Chrome (or another Chromium browser — Edge, Brave, Samsung Internet all work the same way).',
+  'Tap the menu — three dots (⋮) in the top-right corner.',
+  'Tap "Install app" (or "Add to Home screen" on older versions).',
+  'Confirm by tapping "Install" in the popup.',
+];
+
+const iosSteps = [
+  'Open this site in Safari — installing from Chrome or another browser on iOS won’t work; Safari is the only one Apple lets add a real home-screen app.',
+  'Tap the Share icon at the bottom of the screen (a square with an arrow pointing up).',
+  'Scroll down and tap "Add to Home Screen".',
+  'Tap "Add" in the top-right corner to confirm.',
+];
+---
+
+<BaseLayout title="Install the App" description="Install Trusted Gemlab on your Android or iPhone home screen.">
+  <div class="mx-auto max-w-2xl">
+    <h1 class="font-display mb-2 text-3xl font-semibold sm:text-4xl">Install Trusted Gemlab</h1>
+    <p class="mb-8 text-text-secondary">
+      Add it to your home screen for one-tap access, a full-screen app-like experience, and no address bar in the way.
+    </p>
+
+    <div class="mb-10">
+      <InstallPromptButton client:load />
+    </div>
+
+    <section class="mb-10 rounded-2xl border border-bg-selected/60 bg-bg-element p-6">
+      <div class="mb-4 flex items-center gap-3">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="text-primary">
+          <path d="M6 18c0 .55.45 1 1 1h1v3.5a1.5 1.5 0 0 0 3 0V19h2v3.5a1.5 1.5 0 0 0 3 0V19h1c.55 0 1-.45 1-1V8H6v10ZM3.5 8A1.5 1.5 0 0 0 2 9.5v7a1.5 1.5 0 0 0 3 0v-7A1.5 1.5 0 0 0 3.5 8Zm17 0a1.5 1.5 0 0 0-1.5 1.5v7a1.5 1.5 0 0 0 3 0v-7A1.5 1.5 0 0 0 20.5 8Zm-3.443-4.146.865-.865a.5.5 0 1 0-.708-.707l-.976.976A5.96 5.96 0 0 0 12 2.5a5.96 5.96 0 0 0-4.238.758l-.976-.976a.5.5 0 1 0-.708.707l.865.865A5.99 5.99 0 0 0 5 8h14a5.99 5.99 0 0 0-2.943-4.146ZM9.5 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm5 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+        </svg>
+        <h2 class="text-lg font-semibold">Android</h2>
+      </div>
+      <ol class="flex flex-col gap-3">
+        {
+          androidSteps.map((step, i) => (
+            <li class="flex gap-3 text-sm leading-relaxed text-text-secondary">
+              <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-xs font-semibold text-primary">
+                {i + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mb-10 rounded-2xl border border-bg-selected/60 bg-bg-element p-6">
+      <div class="mb-4 flex items-center gap-3">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-primary">
+          <path d="M16.365 1.43c0 1.14-.474 2.27-1.256 3.11-.845.9-2.166 1.62-3.31 1.53-.14-1.07.49-2.22 1.24-3.01.85-.92 2.32-1.62 3.326-1.63ZM20.5 17.16c-.5 1.15-.74 1.66-1.38 2.68-.9 1.43-2.16 3.22-3.72 3.24-1.39.02-1.75-.9-3.63-.89-1.88.01-2.28.91-3.67.89-1.56-.02-2.76-1.62-3.66-3.05-2.5-3.95-2.76-8.59-1.22-11.06.94-1.53 2.42-2.48 3.85-2.48 1.44 0 2.35.9 3.55.9 1.16 0 1.87-.9 3.55-.9 1.28 0 2.63.7 3.6 1.9-3.17 1.74-2.66 6.27.71 7.87Z" />
+        </svg>
+        <h2 class="text-lg font-semibold">iPhone &amp; iPad</h2>
+      </div>
+      <ol class="flex flex-col gap-3">
+        {
+          iosSteps.map((step, i) => (
+            <li class="flex gap-3 text-sm leading-relaxed text-text-secondary">
+              <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-xs font-semibold text-primary">
+                {i + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <p class="text-center text-xs text-text-secondary">
+      On a laptop or desktop? Look for an install icon (⊕ or a monitor-with-arrow) at the right edge of your browser's
+      address bar — Chrome, Edge, and most Chromium browsers support it too.
+    </p>
+  </div>
+</BaseLayout>
+

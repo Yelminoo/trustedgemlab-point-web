@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 
 import '@/styles/global.css';
 import { AuthHydrator } from '@/components/shared/AuthHydrator';
+import { InstallBanner } from '@/components/install/InstallBanner';
 import { Nav } from '@/components/shared/Nav';
 
 interface Props {
@@ -54,6 +55,19 @@ const {
     />
     <meta name="description" content={description} />
     <title>{title} · Trusted Gemlab</title>
+
+    <!-- ===== PWA ===== -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#8d1b20" />
+    <!-- iOS Safari ignores the manifest for "standalone" launch behavior and
+         the home-screen icon — these three tags are the ones it actually
+         reads (still required as of current iOS Safari; unlike Chrome/
+         Android, Apple hasn't unified this onto the manifest). -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Trusted Gemlab" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
     <ClientRouter />
   </head>
   <body class="min-h-screen bg-bg text-text">
@@ -68,11 +82,25 @@ const {
     -->
     <AuthHydrator client:load transition:persist transition:name="auth-hydrator" />
     <Nav client:load transition:persist transition:name="site-nav" />
+    <InstallBanner client:load transition:persist transition:name="install-banner" />
     <main class={fullBleed ? '' : 'mx-auto max-w-5xl px-4 py-8 sm:px-6'}>
       <slot />
     </main>
     <footer class="mx-auto max-w-5xl px-4 py-10 text-center text-xs text-text-secondary sm:px-6">
       Trusted Gemological Laboratory
+      <br />
+      <a href="/install" class="underline">Install this app</a>
     </footer>
+
+    <!-- Registered after `load` so it never competes with the page's own
+         initial fetches for bandwidth/priority — installability and the
+         offline fallback aren't time-critical the way first paint is. -->
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
+        });
+      }
+    </script>
   </body>
 </html>
