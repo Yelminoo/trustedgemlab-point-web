@@ -40,12 +40,12 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-bg-selected bg-bg/90 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
-        <a href="/" className="flex items-center gap-2">
-          <img src="/logo.svg" alt="" className="size-7" />
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">
+        <a href="/" className="mr-auto flex items-center gap-2.5">
+          <img src="/logo.svg" alt="" className="size-11 shrink-0" />
           <span className="flex items-baseline gap-1.5">
-            <span className="font-mono text-lg font-bold text-primary">Trusted</span>
-            <span className="hidden text-xs text-text-secondary sm:inline">Gemological Laboratory</span>
+            <span className="font-mono text-xl font-bold text-primary">Trusted</span>
+            <span className="hidden text-sm text-text-secondary sm:inline">Gemological Laboratory</span>
           </span>
         </a>
 
