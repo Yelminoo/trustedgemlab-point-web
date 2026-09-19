@@ -108,28 +108,41 @@ function AccountInner() {
                   {mode === 'login' ? 'Sign in to see your points' : 'Create an account to start earning points'}
                 </p>
                 {mode === 'register' && (
-                  <TextField value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" autoComplete="name" />
+                  <TextField
+                    label="Full name"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Jane Doe"
+                    autoComplete="name"
+                  />
                 )}
                 <TextField
+                  label="Email"
+                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
+                  placeholder="you@example.com"
                   type="email"
                   autoComplete="email"
                 />
                 {mode === 'register' && (
                   <TextField
+                    label="Phone number"
+                    optional
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Phone number (optional)"
+                    placeholder="+95 9xx xxx xxx"
                     type="tel"
                     autoComplete="tel"
                   />
                 )}
                 <TextField
+                  label="Password"
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
+                  placeholder="••••••••"
                   type="password"
                   autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                 />

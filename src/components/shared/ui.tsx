@@ -32,11 +32,29 @@ export function Button({
   );
 }
 
-export function TextField({ label, className = '', ...props }: InputHTMLAttributes<HTMLInputElement> & { label?: string }) {
+export function TextField({
+  label,
+  required,
+  optional,
+  className = '',
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & { label?: string; required?: boolean; optional?: boolean }) {
   return (
     <label className="flex flex-col gap-1.5">
-      {label && <span className="text-sm font-medium text-text-secondary">{label}</span>}
+      {label && (
+        <span className="text-sm font-medium text-text-secondary">
+          {label}
+          {required && (
+            <span className="text-danger" aria-hidden="true">
+              {' '}
+              *
+            </span>
+          )}
+          {optional && <span className="font-normal text-text-secondary/70"> (optional)</span>}
+        </span>
+      )}
       <input
+        required={required}
         className={`min-h-11 w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-base text-text outline-none focus:ring-2 focus:ring-primary/30 sm:text-sm ${className}`}
         {...props}
       />
