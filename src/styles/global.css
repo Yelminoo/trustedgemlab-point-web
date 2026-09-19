@@ -56,6 +56,15 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Browsers only give <a> a pointer cursor automatically — a plain <button>
+   defaults to cursor: default, which this app uses everywhere (tab
+   switches, toggles, dismiss/close controls, the theme switch) without
+   individually overriding it each time. One rule here covers all of them. */
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']) {
+  cursor: pointer;
+}
+
 /* Landing-page hero motion — a single staggered reveal on load (each
    element's own `animation-delay`, set via inline style/Tailwind arbitrary
    values where used) plus a slow light-sweep across the facet graphic,

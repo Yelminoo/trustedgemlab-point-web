@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import '@/styles/global.css';
 import { AuthHydrator } from '@/components/shared/AuthHydrator';
 import { Nav } from '@/components/shared/Nav';
+import { PushRegistrar } from '@/components/shared/PushRegistrar';
 
 interface Props {
   title: string;
@@ -80,6 +81,7 @@ const {
       best-practice when the persisted element has no other stable id.
     -->
     <AuthHydrator client:load transition:persist transition:name="auth-hydrator" />
+    <PushRegistrar client:load transition:persist transition:name="push-registrar" />
     <Nav client:load transition:persist transition:name="site-nav" />
     <main class={fullBleed ? '' : 'mx-auto max-w-5xl px-4 py-8 sm:px-6'}>
       <slot />

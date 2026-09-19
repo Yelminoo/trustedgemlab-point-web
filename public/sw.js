@@ -30,3 +30,43 @@ self.addEventListener('fetch', (event) => {
     fetch(request).catch(() => caches.match('/offline.html'))
   );
 });
+
+// The backend sends payload as JSON.stringify({ title, body, data }) — see
+// notifyCustomer()/broadcastNotification() in trusted-gemlab-mobile-backend's
+// src/push.ts. This is the piece that actually turns a received push
+// message into a visible OS notification; without it, subscribing would
+// succeed but nothing would ever show up.
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+  let payload;
+  try {
+    payload = event.data.json();
+  } catch {
+    return;
+  }
+  const { title, body, data } = payload;
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body,
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      data,
+    })
+  );
+});
+
+// Focuses an already-open tab if there is one, otherwise opens a new one —
+// standard "bring the app to front" click handler. Always lands on
+// /dashboard for now (none of today's notification types carry a more
+// specific destination URL in `data` yet).
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ('focus' in client) return client.focus();
+      }
+      return self.clients.openWindow('/dashboard');
+    })
+  );
+});
