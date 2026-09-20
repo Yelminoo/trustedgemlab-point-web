@@ -12,11 +12,16 @@ const STORAGE_KEY = 'tgl_customer_session';
 interface StoredSession {
   customer: CustomerUser;
   accessToken: string;
+  refreshToken: string;
 }
 
 interface AuthState {
   customer: CustomerUser | null;
   accessToken: string | null;
+  // 7-day token used by lib/api/client.ts to silently mint a new
+  // accessToken when one expires (they only last 15 minutes) — see that
+  // file's refreshAccessToken(). Persisted the same way accessToken is.
+  refreshToken: string | null;
   hydrated: boolean;
   // Explicit, hand-rolled hydration instead of zustand's `persist`
   // middleware — that middleware's rehydrate() lifecycle turned out not to
@@ -26,7 +31,10 @@ interface AuthState {
   // read-localStorage-in-an-effect pattern mobile-point's own auth-store
   // uses, which has no such issue — simpler to reason about and verify.
   hydrate: () => void;
-  setSession: (customer: CustomerUser, accessToken: string) => void;
+  setSession: (customer: CustomerUser, accessToken: string, refreshToken: string) => void;
+  // Used only by client.ts after a successful silent refresh — updates just
+  // the accessToken without touching customer/refreshToken.
+  setAccessToken: (accessToken: string) => void;
   updateCustomer: (patch: Partial<CustomerUser>) => void;
   logout: () => void;
 }
@@ -34,6 +42,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set, get) => ({
   customer: null,
   accessToken: null,
+  refreshToken: null,
   hydrated: false,
 
   hydrate: () => {
@@ -42,7 +51,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const stored = JSON.parse(raw) as StoredSession;
-        set({ customer: stored.customer, accessToken: stored.accessToken, hydrated: true });
+        set({ customer: stored.customer, accessToken: stored.accessToken, refreshToken: stored.refreshToken, hydrated: true });
         return;
       }
     } catch {
@@ -52,21 +61,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ hydrated: true });
   },
 
-  setSession: (customer, accessToken) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customer, accessToken }));
-    set({ customer, accessToken });
+  setSession: (customer, accessToken, refreshToken) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customer, accessToken, refreshToken }));
+    set({ customer, accessToken, refreshToken });
+  },
+
+  setAccessToken: (accessToken) => {
+    const { customer, refreshToken } = get();
+    if (!customer || !refreshToken) return;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customer, accessToken, refreshToken }));
+    set({ accessToken });
   },
 
   updateCustomer: (patch) => {
-    const { customer, accessToken } = get();
-    if (!customer || !accessToken) return;
+    const { customer, accessToken, refreshToken } = get();
+    if (!customer || !accessToken || !refreshToken) return;
     const next = { ...customer, ...patch };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customer: next, accessToken }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customer: next, accessToken, refreshToken }));
     set({ customer: next });
   },
 
   logout: () => {
     localStorage.removeItem(STORAGE_KEY);
-    set({ customer: null, accessToken: null });
+    set({ customer: null, accessToken: null, refreshToken: null });
   },
 }));

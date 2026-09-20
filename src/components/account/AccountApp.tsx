@@ -42,7 +42,7 @@ function AccountInner() {
         mode === 'login'
           ? await loginCustomer(email.trim(), password)
           : await registerCustomer(email.trim(), password, name.trim(), phone.trim() || null, dataConsent);
-      setSession(result.customer, result.accessToken);
+      setSession(result.customer, result.accessToken, result.refreshToken);
       setPassword('');
       // Landing into the dashboard right after signing in (rather than
       // staying on /account) matches what the gate does everywhere else —
