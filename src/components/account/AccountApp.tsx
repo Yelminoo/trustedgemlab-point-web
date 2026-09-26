@@ -9,6 +9,7 @@ import { ChangeEmailSection } from '@/components/account/ChangeEmailSection';
 import { ForgotPasswordFlow } from '@/components/account/ForgotPasswordFlow';
 import { VerifyEmailBanner } from '@/components/account/VerifyEmailBanner';
 import { Modal } from '@/components/shared/Modal';
+import { Turnstile } from '@/components/shared/Turnstile';
 import { Button, Card, Checkbox, ErrorText, TextField } from '@/components/shared/ui';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuthStore } from '@/lib/stores/auth-store';
@@ -29,6 +30,10 @@ function AccountInner() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [dataConsent, setDataConsent] = useState(false);
+  // Honeypot — a hidden field real users never see or fill in; only a bot
+  // that blindly fills every input it finds in the DOM ever sets this.
+  const [website, setWebsite] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
@@ -43,7 +48,7 @@ function AccountInner() {
       const result =
         mode === 'login'
           ? await loginCustomer(email.trim(), password)
-          : await registerCustomer(email.trim(), password, name.trim(), phone.trim() || null, dataConsent);
+          : await registerCustomer(email.trim(), password, name.trim(), phone.trim() || null, dataConsent, website, turnstileToken);
       setSession(result.customer, result.accessToken, result.refreshToken);
       setPassword('');
       // Landing into the dashboard right after signing in (rather than
@@ -110,14 +115,32 @@ function AccountInner() {
                   {mode === 'login' ? t('account.signInPrompt') : t('account.registerPrompt')}
                 </p>
                 {mode === 'register' && (
-                  <TextField
-                    label={t('account.nameLabel')}
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder={t('account.namePlaceholder')}
-                    autoComplete="name"
-                  />
+                  <>
+                    {/* Honeypot — visually and semantically hidden from real
+                        users (off-screen, aria-hidden, unreachable by Tab)
+                        but still present in the DOM for a bot that scrapes
+                        every input on the page to blindly fill in. */}
+                    <div className="absolute left-[-9999px]" aria-hidden="true">
+                      <label htmlFor="website">Website</label>
+                      <input
+                        id="website"
+                        name="website"
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={website}
+                        onChange={(e) => setWebsite(e.target.value)}
+                      />
+                    </div>
+                    <TextField
+                      label={t('account.nameLabel')}
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder={t('account.namePlaceholder')}
+                      autoComplete="name"
+                    />
+                  </>
                 )}
                 <TextField
                   label={t('account.emailLabel')}
@@ -149,21 +172,24 @@ function AccountInner() {
                   autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                 />
                 {mode === 'register' && (
-                  <Checkbox
-                    checked={dataConsent}
-                    onChange={setDataConsent}
-                    label={
-                      <>
-                        {t('account.dataConsent')}{' '}
-                        <button
-                          type="button"
-                          onClick={() => setShowTerms(true)}
-                          className="font-medium text-primary underline underline-offset-2">
-                          {t('account.terms')}
-                        </button>
-                      </>
-                    }
-                  />
+                  <>
+                    <Checkbox
+                      checked={dataConsent}
+                      onChange={setDataConsent}
+                      label={
+                        <>
+                          {t('account.dataConsent')}{' '}
+                          <button
+                            type="button"
+                            onClick={() => setShowTerms(true)}
+                            className="font-medium text-primary underline underline-offset-2">
+                            {t('account.terms')}
+                          </button>
+                        </>
+                      }
+                    />
+                    <Turnstile onToken={setTurnstileToken} />
+                  </>
                 )}
                 <ErrorText>{error}</ErrorText>
                 <Button onClick={handleSubmit} disabled={loading || (mode === 'login' ? !email || !password : !canSubmitRegister)}>

@@ -25,9 +25,22 @@ export function registerCustomer(
   password: string,
   name: string,
   phone: string | null,
-  dataConsent: boolean
+  dataConsent: boolean,
+  // website: honeypot — real users never see/fill this field (see
+  // RegisterForm's hidden input). turnstileToken: Cloudflare Turnstile
+  // verification, see AccountApp's <Turnstile> widget.
+  website: string,
+  turnstileToken: string | null
 ): Promise<AuthResult> {
-  return apiPost('/customer/register', { email, password, name, phone: phone || undefined, dataConsent });
+  return apiPost('/customer/register', {
+    email,
+    password,
+    name,
+    phone: phone || undefined,
+    dataConsent,
+    website,
+    turnstileToken: turnstileToken || undefined,
+  });
 }
 
 export function loginCustomer(email: string, password: string): Promise<AuthResult> {
