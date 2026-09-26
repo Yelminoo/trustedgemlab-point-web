@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { confirmEmailChange, requestEmailChange } from '@/lib/api/account';
 import { Button, ErrorText, TextField } from '@/components/shared/ui';
@@ -11,6 +12,7 @@ export function ChangeEmailSection({
   accessToken: string;
   onEmailChanged: (newEmail: string) => void;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<'request' | 'confirm'>('request');
   const [newEmail, setNewEmail] = useState('');
@@ -26,11 +28,11 @@ export function ChangeEmailSection({
     setLoading(true);
     try {
       const res = await requestEmailChange(newEmail.trim(), accessToken);
-      setMessage(res.message ?? 'Check your new email for a code.');
+      setMessage(res.message ?? t('changeEmail.checkNewEmail'));
       setStep('confirm');
       startCooldown();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setLoading(false);
     }
@@ -42,10 +44,10 @@ export function ChangeEmailSection({
     setResending(true);
     try {
       const res = await requestEmailChange(newEmail.trim(), accessToken);
-      setMessage(res.message ?? 'Check your new email for a code.');
+      setMessage(res.message ?? t('changeEmail.checkNewEmail'));
       startCooldown();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setResending(false);
     }
@@ -62,7 +64,7 @@ export function ChangeEmailSection({
       setNewEmail('');
       setOtp('');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setLoading(false);
     }
@@ -71,7 +73,7 @@ export function ChangeEmailSection({
   if (!open) {
     return (
       <button onClick={() => setOpen(true)} className="text-sm font-medium text-primary">
-        Change Email
+        {t('changeEmail.changeEmail')}
       </button>
     );
   }
@@ -82,7 +84,7 @@ export function ChangeEmailSection({
         <TextField
           value={newEmail}
           onChange={(e) => setNewEmail(e.target.value)}
-          placeholder="New email"
+          placeholder={t('changeEmail.newEmailPlaceholder')}
           type="email"
           autoComplete="email"
         />
@@ -92,7 +94,7 @@ export function ChangeEmailSection({
           <TextField
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
-            placeholder="6-digit code"
+            placeholder={t('changeEmail.codePlaceholder')}
             inputMode="numeric"
             maxLength={6}
             autoComplete="one-time-code"
@@ -101,7 +103,11 @@ export function ChangeEmailSection({
             onClick={handleResend}
             disabled={resending || !canResend}
             className="text-center text-sm font-medium text-primary disabled:text-text-secondary">
-            {resending ? 'Please wait…' : canResend ? 'Resend code' : `Resend code in ${remainingSeconds}s`}
+            {resending
+              ? t('common.pleaseWait')
+              : canResend
+                ? t('verifyEmail.resendCode')
+                : t('verifyEmail.resendCodeIn', { seconds: remainingSeconds })}
           </button>
         </>
       )}
@@ -109,11 +115,11 @@ export function ChangeEmailSection({
       <ErrorText>{error}</ErrorText>
 
       <Button onClick={step === 'request' ? handleRequest : handleConfirm} disabled={loading || (step === 'request' ? !newEmail : !otp)}>
-        {loading ? 'Please wait…' : step === 'request' ? 'Send Code' : 'Confirm'}
+        {loading ? t('common.pleaseWait') : step === 'request' ? t('changeEmail.sendCode') : t('changeEmail.confirm')}
       </Button>
 
       <button onClick={() => setOpen(false)} className="text-center text-sm font-medium text-text-secondary">
-        Cancel
+        {t('common.cancel')}
       </button>
     </div>
   );

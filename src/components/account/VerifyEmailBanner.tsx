@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { confirmEmailVerification, requestEmailVerification } from '@/lib/api/account';
 import { Button, Card, ErrorText, SuccessText, TextField } from '@/components/shared/ui';
@@ -19,6 +20,7 @@ export function VerifyEmailBanner({
   accessToken: string;
   onVerified: () => void;
 }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState<'status' | 'code'>('status');
   const [otp, setOtp] = useState('');
   const [message, setMessage] = useState('');
@@ -34,11 +36,11 @@ export function VerifyEmailBanner({
     setRequesting(true);
     try {
       const res = await requestEmailVerification(accessToken);
-      setMessage(res.message ?? 'A new code has been sent.');
+      setMessage(res.message ?? t('verifyEmail.codeResent'));
       setStep('code');
       startCooldown();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setRequesting(false);
     }
@@ -52,7 +54,7 @@ export function VerifyEmailBanner({
       await confirmEmailVerification(otp.trim(), accessToken);
       onVerified();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setConfirming(false);
     }
@@ -60,16 +62,16 @@ export function VerifyEmailBanner({
 
   return (
     <Card className="flex flex-col gap-3 text-center">
-      <p className="font-semibold">Verify your email</p>
+      <p className="font-semibold">{t('verifyEmail.title')}</p>
       <p className="text-sm text-text-secondary">
-        {step === 'status' ? `${email} isn't verified yet.` : `Enter the code we sent to ${email}.`}
+        {step === 'status' ? t('verifyEmail.statusUnverified', { email }) : t('verifyEmail.body', { email })}
       </p>
 
       {step === 'code' && (
         <TextField
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
-          placeholder="6-digit code"
+          placeholder={t('changeEmail.codePlaceholder')}
           inputMode="numeric"
           maxLength={6}
           autoComplete="one-time-code"
@@ -81,18 +83,22 @@ export function VerifyEmailBanner({
 
       {step === 'status' ? (
         <Button onClick={handleRequest} disabled={requesting}>
-          {requesting ? 'Please wait…' : 'Send verification code'}
+          {requesting ? t('common.pleaseWait') : t('verifyEmail.sendCode')}
         </Button>
       ) : (
         <>
           <Button onClick={handleConfirm} disabled={confirming || !otp}>
-            {confirming ? 'Please wait…' : 'Verify'}
+            {confirming ? t('common.pleaseWait') : t('verifyEmail.confirm')}
           </Button>
           <button
             onClick={handleRequest}
             disabled={requesting || !canResend}
             className="text-sm font-medium text-primary disabled:text-text-secondary">
-            {requesting ? 'Please wait…' : canResend ? 'Resend code' : `Resend code in ${remainingSeconds}s`}
+            {requesting
+              ? t('common.pleaseWait')
+              : canResend
+                ? t('verifyEmail.resendCode')
+                : t('verifyEmail.resendCodeIn', { seconds: remainingSeconds })}
           </button>
         </>
       )}

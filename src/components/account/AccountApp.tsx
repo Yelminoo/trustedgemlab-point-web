@@ -1,6 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { navigate } from 'astro:transitions/client';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { loginCustomer, registerCustomer } from '@/lib/api/auth';
 import { AddressContent, TermsContent } from '@/components/account/StaticContent';
@@ -13,6 +14,7 @@ import { getQueryClient } from '@/lib/query-client';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
 function AccountInner() {
+  const { t } = useTranslation();
   const { customer, accessToken, hydrated, setSession, updateCustomer, logout } = useAuthStore();
   // The landing page's "Get Started" CTA links here with ?mode=register so
   // a new visitor lands straight on the signup form instead of login-first;
@@ -50,7 +52,7 @@ function AccountInner() {
       // profile/settings, it's just not where a fresh sign-in should land.
       navigate('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setLoading(false);
     }
@@ -87,13 +89,13 @@ function AccountInner() {
               />
             </div>
             <button onClick={() => setShowAddress(true)} className="block w-full p-4 text-left text-sm">
-              Location & Contact
+              {t('account.address')}
             </button>
             <button onClick={() => setShowTerms(true)} className="block w-full p-4 text-left text-sm">
-              Terms & Conditions
+              {t('account.terms')}
             </button>
             <button onClick={() => logout()} className="block w-full p-4 text-center text-sm font-semibold text-danger">
-              Log Out
+              {t('account.logOut')}
             </button>
           </Card>
         </div>
@@ -105,44 +107,44 @@ function AccountInner() {
             ) : (
               <>
                 <p className="mb-1 text-sm text-text-secondary">
-                  {mode === 'login' ? 'Sign in to see your points' : 'Create an account to start earning points'}
+                  {mode === 'login' ? t('account.signInPrompt') : t('account.registerPrompt')}
                 </p>
                 {mode === 'register' && (
                   <TextField
-                    label="Full name"
+                    label={t('account.nameLabel')}
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Jane Doe"
+                    placeholder={t('account.namePlaceholder')}
                     autoComplete="name"
                   />
                 )}
                 <TextField
-                  label="Email"
+                  label={t('account.emailLabel')}
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder={t('account.emailPlaceholder')}
                   type="email"
                   autoComplete="email"
                 />
                 {mode === 'register' && (
                   <TextField
-                    label="Phone number"
+                    label={t('account.phoneLabel')}
                     optional
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+95 9xx xxx xxx"
+                    placeholder={t('account.phonePlaceholder')}
                     type="tel"
                     autoComplete="tel"
                   />
                 )}
                 <TextField
-                  label="Password"
+                  label={t('account.passwordLabel')}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder={t('account.passwordPlaceholder')}
                   type="password"
                   autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                 />
@@ -152,31 +154,30 @@ function AccountInner() {
                     onChange={setDataConsent}
                     label={
                       <>
-                        I agree to Trusted Gemlab using the information I've provided, per the{' '}
+                        {t('account.dataConsent')}{' '}
                         <button
                           type="button"
                           onClick={() => setShowTerms(true)}
                           className="font-medium text-primary underline underline-offset-2">
-                          Terms & Conditions
+                          {t('account.terms')}
                         </button>
-                        .
                       </>
                     }
                   />
                 )}
                 <ErrorText>{error}</ErrorText>
                 <Button onClick={handleSubmit} disabled={loading || (mode === 'login' ? !email || !password : !canSubmitRegister)}>
-                  {loading ? 'Please wait…' : mode === 'login' ? 'Sign In' : 'Create Account'}
+                  {loading ? t('common.pleaseWait') : mode === 'login' ? t('account.signIn') : t('account.createAccount')}
                 </Button>
                 {mode === 'login' && (
                   <button onClick={() => setMode('forgot')} className="text-center text-sm font-medium text-primary">
-                    Forgot password?
+                    {t('account.forgotPassword')}
                   </button>
                 )}
                 <button
                   onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
                   className="text-center text-sm font-medium text-primary">
-                  {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+                  {mode === 'login' ? t('account.noAccountSignUp') : t('account.haveAccountSignIn')}
                 </button>
               </>
             )}
@@ -184,10 +185,10 @@ function AccountInner() {
         </div>
       )}
 
-      <Modal open={showAddress} onClose={() => setShowAddress(false)} title="Location & Contact">
+      <Modal open={showAddress} onClose={() => setShowAddress(false)} title={t('account.address')}>
         <AddressContent />
       </Modal>
-      <Modal open={showTerms} onClose={() => setShowTerms(false)} title="Terms & Conditions">
+      <Modal open={showTerms} onClose={() => setShowTerms(false)} title={t('account.terms')}>
         <TermsContent />
       </Modal>
     </>

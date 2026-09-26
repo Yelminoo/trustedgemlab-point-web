@@ -2,7 +2,12 @@
 import { ClientRouter } from 'astro:transitions';
 
 import '@/styles/global.css';
+// Side-effect import — initializes the shared i18next instance before any
+// island on the page renders text, regardless of which islands a given
+// page happens to mount (see src/i18n/index.ts).
+import '@/i18n';
 import { AuthHydrator } from '@/components/shared/AuthHydrator';
+import { LanguageHydrator } from '@/components/shared/LanguageHydrator';
 import { Nav } from '@/components/shared/Nav';
 import { PushRegistrar } from '@/components/shared/PushRegistrar';
 
@@ -92,6 +97,7 @@ const {
       best-practice when the persisted element has no other stable id.
     -->
     <AuthHydrator client:load transition:persist transition:name="auth-hydrator" />
+    <LanguageHydrator client:load transition:persist transition:name="language-hydrator" />
     <PushRegistrar client:load transition:persist transition:name="push-registrar" />
     <Nav client:load transition:persist transition:name="site-nav" />
     <main class={fullBleed ? '' : 'mx-auto max-w-5xl px-4 py-8 sm:px-6'}>

@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { LanguageToggle } from '@/components/shared/LanguageToggle';
 import { ThemeToggle } from '@/components/shared/ThemeToggle';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
 const links = [
-  { href: '/dashboard', label: 'Home' },
-  { href: '/reports', label: 'Reports' },
-  { href: '/redeem', label: 'Redeem' },
+  { href: '/dashboard', key: 'nav.home' },
+  { href: '/reports', key: 'nav.reports' },
+  { href: '/redeem', key: 'nav.redeem' },
 ];
 
 // Nav is persisted across client-side transitions (see BaseLayout), so its
@@ -24,6 +26,7 @@ function usePathname() {
 }
 
 export function Nav() {
+  const { t } = useTranslation();
   const { customer, hydrated, logout } = useAuthStore();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -53,12 +56,12 @@ export function Nav() {
           {showAppLinks &&
             links.map((l) => (
               <a key={l.href} href={l.href} className={linkClass(l.href)}>
-                {l.label}
+                {t(l.key)}
               </a>
             ))}
           {showAppLinks && isAdmin && (
             <a href="/admin" className={linkClass('/admin')}>
-              Admin
+              {t('nav.admin')}
             </a>
           )}
           {!hydrated ? null : customer ? (
@@ -69,20 +72,22 @@ export function Nav() {
               <button
                 onClick={() => logout()}
                 className="rounded-lg bg-bg-selected px-3 py-1.5 text-sm font-medium text-text hover:opacity-80">
-                Log Out
+                {t('nav.logOut')}
               </button>
             </div>
           ) : (
             <a
               href="/account"
               className="rounded-lg bg-primary px-3.5 py-1.5 text-sm font-medium text-on-primary hover:bg-primary-pressed">
-              Sign In
+              {t('nav.signIn')}
             </a>
           )}
+          <LanguageToggle />
           <ThemeToggle />
         </nav>
 
         <div className="flex items-center gap-1 sm:hidden">
+          <LanguageToggle />
           <ThemeToggle />
           {(showAppLinks || (hydrated && !customer)) && (
             <button
@@ -107,7 +112,7 @@ export function Nav() {
                 href={l.href}
                 onClick={() => setOpen(false)}
                 className={`rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === l.href ? 'bg-bg-element text-primary' : 'text-text'}`}>
-                {l.label}
+                {t(l.key)}
               </a>
             ))}
           {showAppLinks && isAdmin && (
@@ -115,7 +120,7 @@ export function Nav() {
               href="/admin"
               onClick={() => setOpen(false)}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium ${pathname === '/admin' ? 'bg-bg-element text-primary' : 'text-text'}`}>
-              Admin
+              {t('nav.admin')}
             </a>
           )}
           {hydrated && customer ? (
@@ -132,12 +137,12 @@ export function Nav() {
                   logout();
                 }}
                 className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-danger hover:bg-bg-element">
-                Log Out
+                {t('nav.logOut')}
               </button>
             </>
           ) : hydrated ? (
             <a href="/account" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium text-primary">
-              Sign In
+              {t('nav.signIn')}
             </a>
           ) : null}
         </nav>

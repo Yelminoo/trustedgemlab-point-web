@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { confirmPasswordReset, requestPasswordReset } from '@/lib/api/account';
 import { Button, ErrorText, TextField } from '@/components/shared/ui';
 import { useResendCooldown } from '@/lib/use-resend-cooldown';
 
 export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => void }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState<'request' | 'confirm'>('request');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -20,11 +22,11 @@ export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => voi
     setLoading(true);
     try {
       const res = await requestPasswordReset(email.trim());
-      setMessage(res.message ?? 'Check your email for a code.');
+      setMessage(res.message ?? t('forgotPassword.checkEmailForCode'));
       setStep('confirm');
       startCooldown();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setLoading(false);
     }
@@ -36,10 +38,10 @@ export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => voi
     setResending(true);
     try {
       const res = await requestPasswordReset(email.trim());
-      setMessage(res.message ?? 'Check your email for a code.');
+      setMessage(res.message ?? t('forgotPassword.checkEmailForCode'));
       startCooldown();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setResending(false);
     }
@@ -52,7 +54,7 @@ export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => voi
       await confirmPasswordReset(email.trim(), otp.trim(), newPassword);
       onBackToLogin();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setLoading(false);
     }
@@ -60,16 +62,22 @@ export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => voi
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-sm text-text-secondary">{step === 'request' ? 'Reset your password' : message}</p>
+      <p className="text-sm text-text-secondary">{step === 'request' ? t('forgotPassword.resetYourPassword') : message}</p>
 
       {step === 'request' ? (
-        <TextField value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" autoComplete="email" />
+        <TextField
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder={t('account.emailPlaceholder')}
+          type="email"
+          autoComplete="email"
+        />
       ) : (
         <>
           <TextField
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
-            placeholder="6-digit code"
+            placeholder={t('changeEmail.codePlaceholder')}
             inputMode="numeric"
             maxLength={6}
             autoComplete="one-time-code"
@@ -77,7 +85,7 @@ export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => voi
           <TextField
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="New password"
+            placeholder={t('forgotPassword.newPasswordPlaceholder')}
             type="password"
             autoComplete="new-password"
           />
@@ -85,7 +93,11 @@ export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => voi
             onClick={handleResend}
             disabled={resending || !canResend}
             className="text-center text-sm font-medium text-primary disabled:text-text-secondary">
-            {resending ? 'Please wait…' : canResend ? 'Resend code' : `Resend code in ${remainingSeconds}s`}
+            {resending
+              ? t('common.pleaseWait')
+              : canResend
+                ? t('verifyEmail.resendCode')
+                : t('verifyEmail.resendCodeIn', { seconds: remainingSeconds })}
           </button>
         </>
       )}
@@ -95,11 +107,11 @@ export function ForgotPasswordFlow({ onBackToLogin }: { onBackToLogin: () => voi
       <Button
         onClick={step === 'request' ? handleRequest : handleConfirm}
         disabled={loading || (step === 'request' ? !email : !otp || !newPassword)}>
-        {loading ? 'Please wait…' : step === 'request' ? 'Send Code' : 'Reset Password'}
+        {loading ? t('common.pleaseWait') : step === 'request' ? t('forgotPassword.sendCode') : t('forgotPassword.resetPassword')}
       </Button>
 
       <button onClick={onBackToLogin} className="text-center text-sm font-medium text-primary">
-        Back to sign in
+        {t('forgotPassword.backToSignIn')}
       </button>
     </div>
   );

@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ApiError } from '@/lib/api/client';
 import { useCertificateLookup, useMyCertificates } from '@/lib/api/certificates';
@@ -10,6 +11,7 @@ import { getQueryClient } from '@/lib/query-client';
 import { useAuthGate } from '@/lib/use-auth-gate';
 
 function CertificatesInner() {
+  const { t } = useTranslation();
   const { customer, accessToken, ready } = useAuthGate();
   const [certNo, setCertNo] = useState('');
   const [searched, setSearched] = useState('');
@@ -22,7 +24,7 @@ function CertificatesInner() {
   return (
     <div className="mx-auto flex max-w-md flex-col gap-8">
       <div>
-        <h1 className="mb-3 text-lg font-semibold">Find a report</h1>
+        <h1 className="mb-3 text-lg font-semibold">{t('reports.findReport')}</h1>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -30,16 +32,16 @@ function CertificatesInner() {
           }}
           className="flex gap-2">
           <div className="flex-1">
-            <TextField value={certNo} onChange={(e) => setCertNo(e.target.value)} placeholder="Report number" />
+            <TextField value={certNo} onChange={(e) => setCertNo(e.target.value)} placeholder={t('reports.reportNumber')} />
           </div>
           <Button type="submit" disabled={!certNo.trim() || isFetching}>
-            {isFetching ? '…' : 'Search'}
+            {isFetching ? '…' : t('reports.search')}
           </Button>
         </form>
 
         {searched && (
           <div className="mt-4">
-            {notFound && <p className="text-sm text-danger">Report not found for "{searched}".</p>}
+            {notFound && <p className="text-sm text-danger">{t('reports.reportNotFound', { query: searched })}</p>}
             {error && !notFound && <p className="text-sm text-danger">{error.message}</p>}
             {found && <CertificateCard certificate={found} />}
           </div>
@@ -47,11 +49,11 @@ function CertificatesInner() {
       </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-semibold">My Reports</h2>
+        <h2 className="mb-3 text-lg font-semibold">{t('reports.myReports')}</h2>
         {!mine ? (
-          <p className="text-sm text-text-secondary">Loading…</p>
+          <p className="text-sm text-text-secondary">{t('reports.loading')}</p>
         ) : mine.certificates.length === 0 ? (
-          <p className="text-sm text-text-secondary">No reports yet.</p>
+          <p className="text-sm text-text-secondary">{t('reports.noReportsYet')}</p>
         ) : (
           <div className="flex flex-col gap-3">
             {mine.certificates.map((c) => (

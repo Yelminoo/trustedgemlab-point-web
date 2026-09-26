@@ -1,0 +1,138 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "pleaseWait": "Please wait…",
+    "somethingWrong": "Something went wrong",
+    "optional": "optional"
+  },
+  "nav": {
+    "home": "Home",
+    "reports": "Reports",
+    "redeem": "Redeem",
+    "admin": "Admin",
+    "signIn": "Sign In",
+    "logOut": "Log Out"
+  },
+  "home": {
+    "signInDashboard": "Sign in to see your points",
+    "goToAccount": "Go to Account",
+    "pts": "pts",
+    "scanQr": "Scan QR",
+    "freeGemReport": "Free Gem Report",
+    "myCard": "My Card",
+    "recentActivity": "Recent Activity",
+    "back": "Home",
+    "scanTitle": "Scan QR",
+    "cardTitle": "Member Card",
+    "redeemTitle": "Free Gem Report",
+    "reportNotFoundScanned": "Report not found for scanned code \"{{code}}\".",
+    "yoursConfirmed": "✓ This report is yours",
+    "scanAnother": "Scan Another",
+    "showQrToStaff": "Show this QR to staff so they can look up your account."
+  },
+  "memberCard": {
+    "wordmark": "Trusted Gemological Laboratory",
+    "memberLabel": "CUSTOMER MEMBER"
+  },
+  "reportCard": {
+    "issued": "Issued {{date}}",
+    "fields": {
+      "identification": "Identification",
+      "weight": "Weight",
+      "pieces": "Pieces",
+      "dimensions": "Dimensions",
+      "cut": "Cut",
+      "shape": "Shape",
+      "color": "Color",
+      "origin": "Origin",
+      "verifiedBy": "Verified By",
+      "certifiedBy": "Certified By"
+    }
+  },
+  "reports": {
+    "findReport": "Find a report",
+    "reportNumber": "Report number",
+    "search": "Search",
+    "reportNotFound": "Report not found for \"{{query}}\".",
+    "myReports": "My Reports",
+    "loading": "Loading…",
+    "noReportsYet": "No reports yet."
+  },
+  "freeReport": {
+    "redeemFor": "Redeem {{cost}} pts for a free report",
+    "pendingReview": "You already have a request pending review.",
+    "needMorePoints": "You need {{amount}} more points to request one.",
+    "requesting": "Requesting…",
+    "requestButton": "Request Free Report",
+    "status": {
+      "pending": "pending",
+      "approved": "approved",
+      "rejected": "rejected"
+    }
+  },
+  "account": {
+    "signInPrompt": "Sign in to see your points",
+    "registerPrompt": "Create an account to start earning points",
+    "nameLabel": "Full name",
+    "namePlaceholder": "Jane Doe",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "+95 9xx xxx xxx",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "dataConsent": "I agree to Trusted Gemlab using the information I've provided.",
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "forgotPassword": "Forgot password?",
+    "noAccountSignUp": "Don't have an account? Sign up",
+    "haveAccountSignIn": "Already have an account? Sign in",
+    "address": "Location & Contact",
+    "terms": "Terms & Conditions",
+    "logOut": "Log Out"
+  },
+  "changeEmail": {
+    "changeEmail": "Change Email",
+    "newEmailPlaceholder": "New email",
+    "checkNewEmail": "Check your new email for a code.",
+    "codePlaceholder": "6-digit code",
+    "sendCode": "Send Code",
+    "confirm": "Confirm"
+  },
+  "verifyEmail": {
+    "title": "Verify your email",
+    "statusUnverified": "{{email}} isn't verified yet.",
+    "body": "Enter the code we sent to {{email}} to verify your account.",
+    "sendCode": "Send verification code",
+    "confirm": "Verify",
+    "resendCode": "Resend code",
+    "resendCodeIn": "Resend code in {{seconds}}s",
+    "codeResent": "A new code has been sent."
+  },
+  "forgotPassword": {
+    "resetYourPassword": "Reset your password",
+    "checkEmailForCode": "Check your email for a code.",
+    "newPasswordPlaceholder": "New password",
+    "sendCode": "Send Code",
+    "resetPassword": "Reset Password",
+    "backToSignIn": "Back to sign in"
+  },
+  "address": {
+    "line1": "No(647), Room No(006), (3) Ward,",
+    "line2": "Merchant Road, Pabedan Township, Yangon, Myanmar",
+    "openInMaps": "Open in Google Maps",
+    "contactTitle": "Contact"
+  },
+  "terms": {
+    "clause1": "(1) All information and assessments presented in this Report are professional opinions issued by Trusted Gemological Laboratory, based on standard scientific testing instruments, current professional expertise, reference data, and reference samples available at the time of examination.",
+    "clause2": "(2) This Report is intended solely for the purpose of identifying the gemstone and does not constitute a guarantee, warranty, valuation, or appraisal.",
+    "clause3": "(3) The color photograph included in the Report is provided only as a reference to the examined gemstone. The actual color and appearance of the stone may differ from the photograph due to lighting, surface condition, and photographic circumstances.",
+    "clause4": "(4) This Trusted Gem Identification Report is issued solely for the personal use of the client who requested the Report. The laboratory bears no responsibility for the client's representations, advertising, or any other use of the Report.",
+    "clause5": "(5) No amendment, addition, deletion, or alteration of any kind to this Report will be accepted.",
+    "clause6": "(6) If, after this Report is issued, the gemstone undergoes treatment, alteration, or any other change, this Report automatically becomes void.",
+    "clause7": "(7) Trusted Gemological Laboratory bears no responsibility for accidental damage that occurs unexpectedly during examination through standard testing methods.",
+    "clause8": "(8) Opinions regarding a gemstone's authenticity, presence or absence of treatment, and country of origin are issued only upon the client's request, and such opinions are solely the professional opinion of the examiner, based on the scientific standards, reference samples, and published academic literature available at the time of examination. As gemstones may be treated or enhanced at any time, Trusted Gemological Laboratory reserves the right to decline to issue a Report if it deems it necessary.",
+    "clause9": "(9) Differences in opinion may arise in Report results due to differences in examination methods, scientific techniques, or expert judgment. Trusted Gemological Laboratory and its staff bear no responsibility for such differences, or for results arising from subsequent re-examinations.",
+    "clause10": "(10) Trusted Gemological Laboratory will not entertain any dispute regarding the opinions, conclusions, examination methods, or any other matter described in this Report."
+  }
+}

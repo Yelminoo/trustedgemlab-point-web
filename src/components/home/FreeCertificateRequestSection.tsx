@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { requestFreeCertificate, useMyCertificateRequests } from '@/lib/api/certificate-requests';
 import { Badge, Button, ErrorText } from '@/components/shared/ui';
@@ -8,6 +9,7 @@ const STATUS_TONE = { pending: 'neutral', approved: 'primary', rejected: 'danger
 // A customer with enough points can request a free certificate; points are
 // only deducted when an admin approves it (see Admin → Requests).
 export function FreeCertificateRequestSection({ balance, cost, accessToken }: { balance: number; cost: number; accessToken: string }) {
+  const { t } = useTranslation();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const { data, refetch } = useMyCertificateRequests(accessToken);
@@ -23,7 +25,7 @@ export function FreeCertificateRequestSection({ balance, cost, accessToken }: { 
       await requestFreeCertificate(null, accessToken);
       await refetch();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common.somethingWrong'));
     } finally {
       setSubmitting(false);
     }
@@ -31,16 +33,16 @@ export function FreeCertificateRequestSection({ balance, cost, accessToken }: { 
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-text-secondary">Redeem {cost.toLocaleString()} pts for a free gem report</p>
+      <p className="text-sm text-text-secondary">{t('freeReport.redeemFor', { cost: cost.toLocaleString() })}</p>
 
-      {hasPending && <p className="text-sm text-text-secondary">You already have a request pending review.</p>}
+      {hasPending && <p className="text-sm text-text-secondary">{t('freeReport.pendingReview')}</p>}
       {!hasPending && balance < cost && (
-        <p className="text-sm text-text-secondary">You need {(cost - balance).toLocaleString()} more points to request one.</p>
+        <p className="text-sm text-text-secondary">{t('freeReport.needMorePoints', { amount: (cost - balance).toLocaleString() })}</p>
       )}
       <ErrorText>{error}</ErrorText>
 
       <Button onClick={handleRequest} disabled={!canRequest || submitting} className="mt-1">
-        {submitting ? 'Requesting…' : 'Request Free Report'}
+        {submitting ? t('freeReport.requesting') : t('freeReport.requestButton')}
       </Button>
 
       {requests.length > 0 && (
@@ -48,9 +50,9 @@ export function FreeCertificateRequestSection({ balance, cost, accessToken }: { 
           {requests.map((r) => (
             <div key={r.id} className="flex items-center justify-between text-sm">
               <span className="text-text-secondary">
-                {new Date(r.createdAt).toLocaleDateString()} — {r.pointsCost} pts
+                {new Date(r.createdAt).toLocaleDateString()} — {r.pointsCost} {t('home.pts')}
               </span>
-              <Badge tone={STATUS_TONE[r.status]}>{r.status}</Badge>
+              <Badge tone={STATUS_TONE[r.status]}>{t(`freeReport.status.${r.status}`)}</Badge>
             </div>
           ))}
         </div>

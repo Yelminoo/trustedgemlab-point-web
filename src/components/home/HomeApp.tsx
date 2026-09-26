@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ApiError } from '@/lib/api/client';
 import { useCertificateLookup } from '@/lib/api/certificates';
@@ -16,6 +17,7 @@ import { useAuthGate } from '@/lib/use-auth-gate';
 type View = 'dashboard' | 'scan' | 'card' | 'redeem';
 
 function HomeInner() {
+  const { t } = useTranslation();
   const { customer, accessToken, ready } = useAuthGate();
   const [view, setView] = useState<View>('dashboard');
   const { data: wallet } = useWallet(accessToken);
@@ -23,11 +25,15 @@ function HomeInner() {
   if (!ready || !customer) return <GateLoading />;
 
   if (view !== 'dashboard') {
-    const titles: Record<Exclude<View, 'dashboard'>, string> = { scan: 'Scan QR', card: 'Member Card', redeem: 'Free GEM Report' };
+    const titles: Record<Exclude<View, 'dashboard'>, string> = {
+      scan: t('home.scanTitle'),
+      card: t('home.cardTitle'),
+      redeem: t('home.redeemTitle'),
+    };
     return (
       <div className="mx-auto max-w-md">
         <button onClick={() => setView('dashboard')} className="mb-4 flex items-center gap-1 text-sm font-medium text-text-secondary">
-          ← Home
+          ← {t('home.back')}
         </button>
         <h1 className="mb-4 text-lg font-semibold">{titles[view]}</h1>
         {view === 'scan' && <ScanView accessToken={accessToken} />}
@@ -47,23 +53,25 @@ function HomeInner() {
         </a>
         <div>
           <p className="text-sm text-text-secondary">Trusted</p>
-          <p className="font-mono text-xl font-semibold text-primary">{(wallet?.balance ?? 0).toLocaleString()} pts</p>
+          <p className="font-mono text-xl font-semibold text-primary">
+            {(wallet?.balance ?? 0).toLocaleString()} {t('home.pts')}
+          </p>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <button onClick={() => setView('scan')} className="flex flex-col items-center gap-2 rounded-2xl bg-bg-element p-5 hover:opacity-80">
           <QrIcon />
-          <span className="text-sm font-medium">Scan QR</span>
+          <span className="text-sm font-medium">{t('home.scanQr')}</span>
         </button>
         <button onClick={() => setView('redeem')} className="flex flex-col items-center gap-2 rounded-2xl bg-bg-element p-5 hover:opacity-80">
           <GiftIcon />
-          <span className="text-sm font-medium">Free Gem Report</span>
+          <span className="text-sm font-medium">{t('home.freeGemReport')}</span>
         </button>
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-semibold">My Card</p>
+        <p className="mb-2 text-sm font-semibold">{t('home.myCard')}</p>
         <button onClick={() => setView('card')} className="block w-full text-left">
           <MemberCard customerId={customer.id} email={customer.email} size="compact" />
         </button>
@@ -71,7 +79,7 @@ function HomeInner() {
 
       {wallet && wallet.transactions.length > 0 && (
         <div>
-          <p className="mb-2 text-sm font-semibold">Recent Activity</p>
+          <p className="mb-2 text-sm font-semibold">{t('home.recentActivity')}</p>
           <div className="flex flex-col gap-2">
             {wallet.transactions.slice(0, 3).map((tx) => (
               <div key={tx.id} className="flex items-center justify-between text-sm">
@@ -90,6 +98,7 @@ function HomeInner() {
 }
 
 function ScanView({ accessToken }: { accessToken: string | null }) {
+  const { t } = useTranslation();
   const [scannedCertNo, setScannedCertNo] = useState('');
   const { data: certificate, error } = useCertificateLookup(scannedCertNo, accessToken);
   const notFound = error instanceof ApiError && error.status === 404;
@@ -100,11 +109,11 @@ function ScanView({ accessToken }: { accessToken: string | null }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {notFound && <p className="text-center text-sm text-danger">Report not found for scanned code "{scannedCertNo}".</p>}
+      {notFound && <p className="text-center text-sm text-danger">{t('home.reportNotFoundScanned', { code: scannedCertNo })}</p>}
       {error && !notFound && <p className="text-center text-sm text-danger">{error.message}</p>}
-      {certificate && <p className="text-center text-sm font-semibold text-primary">✓ This report is yours</p>}
+      {certificate && <p className="text-center text-sm font-semibold text-primary">{t('home.yoursConfirmed')}</p>}
       {certificate && <CertificateCard certificate={certificate} />}
-      <Button onClick={() => setScannedCertNo('')}>Scan Another</Button>
+      <Button onClick={() => setScannedCertNo('')}>{t('home.scanAnother')}</Button>
     </div>
   );
 }
