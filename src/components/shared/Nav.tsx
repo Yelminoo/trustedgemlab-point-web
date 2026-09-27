@@ -63,6 +63,7 @@ export function Nav() {
   }, [open]);
 
   return (
+    <>
     <header className="sticky top-0 z-40 border-b border-bg-selected bg-bg/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">
         <a href="/" className="mr-auto flex items-center gap-2.5">
@@ -123,17 +124,25 @@ export function Nav() {
           )}
         </div>
       </div>
+    </header>
 
-      {/* Mobile drawer — always mounted (not `open &&`) so the transform
-          transition actually has something to animate from/to; visibility
-          and click-through are controlled via classes instead. */}
+    {/* Mobile drawer — rendered as a sibling of <header>, not a child of it.
+        <header> is `position: sticky` + has its own z-index + backdrop-blur,
+        all of which create a CSS stacking context — a fixed-position child
+        would have its z-index resolved *inside* that context rather than at
+        the document root, so anything elsewhere on the page with its own
+        stacking context could still render on top of it. Kept as a sibling
+        (and pushed to z-[100]) so it's unambiguously above everything else.
+        Always mounted (not `open &&`) so the transform transition actually
+        has something to animate from/to; visibility and click-through are
+        controlled via classes instead. */}
+    <div
+      className={`fixed inset-0 z-100 sm:hidden ${open ? '' : 'pointer-events-none'}`}
+      aria-hidden={!open}>
       <div
-        className={`fixed inset-0 z-50 sm:hidden ${open ? '' : 'pointer-events-none'}`}
-        aria-hidden={!open}>
-        <div
-          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`}
-          onClick={() => setOpen(false)}
-        />
+        className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`}
+        onClick={() => setOpen(false)}
+      />
         <nav
           className={`absolute right-0 top-0 flex h-full w-72 max-w-[80vw] flex-col gap-1 bg-bg px-4 py-3 shadow-xl transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="mb-2 flex items-center justify-between">
@@ -189,7 +198,7 @@ export function Nav() {
             </a>
           ) : null}
         </nav>
-      </div>
-    </header>
+    </div>
+    </>
   );
 }
