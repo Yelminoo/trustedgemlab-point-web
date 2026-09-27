@@ -41,6 +41,27 @@ export function Nav() {
     return `text-sm font-medium ${active ? 'text-primary' : 'text-text-secondary hover:text-text'}`;
   }
 
+  // Body scroll lock while the mobile drawer is open — otherwise the page
+  // behind it keeps scrolling, which feels broken for a slide-in panel
+  // (a dropdown didn't need this since it never covered/blocked the page).
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false);
+    }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open]);
+
   return (
     <header className="sticky top-0 z-40 border-b border-bg-selected bg-bg/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">
@@ -103,8 +124,30 @@ export function Nav() {
         </div>
       </div>
 
-      {open && (
-        <nav className="flex flex-col gap-1 border-t border-bg-selected px-4 py-3 sm:hidden">
+      {/* Mobile drawer — always mounted (not `open &&`) so the transform
+          transition actually has something to animate from/to; visibility
+          and click-through are controlled via classes instead. */}
+      <div
+        className={`fixed inset-0 z-50 sm:hidden ${open ? '' : 'pointer-events-none'}`}
+        aria-hidden={!open}>
+        <div
+          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`}
+          onClick={() => setOpen(false)}
+        />
+        <nav
+          className={`absolute right-0 top-0 flex h-full w-72 max-w-[80vw] flex-col gap-1 bg-bg px-4 py-3 shadow-xl transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="mb-2 flex items-center justify-between">
+            <span className="font-mono text-sm font-bold text-primary">Trusted</span>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="flex size-9 items-center justify-center rounded-lg text-text-secondary hover:bg-bg-element">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </div>
+
           {showAppLinks &&
             links.map((l) => (
               <a
@@ -146,7 +189,7 @@ export function Nav() {
             </a>
           ) : null}
         </nav>
-      )}
+      </div>
     </header>
   );
 }
