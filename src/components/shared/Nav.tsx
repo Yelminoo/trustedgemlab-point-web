@@ -38,7 +38,7 @@ export function Nav() {
 
   function linkClass(href: string) {
     const active = pathname === href;
-    return `text-sm font-medium ${active ? 'text-primary' : 'text-text-secondary hover:text-text'}`;
+    return `whitespace-nowrap text-sm font-medium ${active ? 'text-primary' : 'text-text-secondary hover:text-text'}`;
   }
 
   // Body scroll lock while the mobile drawer is open — otherwise the page
@@ -74,7 +74,7 @@ export function Nav() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-6 sm:flex">
+        <nav className="hidden items-center gap-4 md:flex">
           {showAppLinks &&
             links.map((l) => (
               <a key={l.href} href={l.href} className={linkClass(l.href)}>
@@ -93,14 +93,14 @@ export function Nav() {
               </a>
               <button
                 onClick={() => logout()}
-                className="rounded-lg bg-bg-selected px-3 py-1.5 text-sm font-medium text-text hover:opacity-80">
+                className="whitespace-nowrap rounded-lg bg-bg-selected px-3 py-1.5 text-sm font-medium text-text hover:opacity-80">
                 {t('nav.logOut')}
               </button>
             </div>
           ) : (
             <a
               href="/account"
-              className="rounded-lg bg-primary px-3.5 py-1.5 text-sm font-medium text-on-primary hover:bg-primary-pressed">
+              className="whitespace-nowrap rounded-lg bg-primary px-3.5 py-1.5 text-sm font-medium text-on-primary hover:bg-primary-pressed">
               {t('nav.signIn')}
             </a>
           )}
@@ -108,7 +108,7 @@ export function Nav() {
           <ThemeToggle />
         </nav>
 
-        <div className="flex items-center gap-1 sm:hidden">
+        <div className="flex items-center gap-1 md:hidden">
           <LanguageToggle />
           <ThemeToggle />
           {(showAppLinks || (hydrated && !customer)) && (
@@ -137,7 +137,7 @@ export function Nav() {
         has something to animate from/to; visibility and click-through are
         controlled via classes instead. */}
     <div
-      className={`fixed inset-0 z-100 sm:hidden ${open ? '' : 'pointer-events-none'}`}
+      className={`fixed inset-0 z-100 md:hidden ${open ? '' : 'pointer-events-none'}`}
       aria-hidden={!open}>
       <div
         className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`}

@@ -37,7 +37,12 @@ function HomeInner() {
         </button>
         <h1 className="mb-4 text-lg font-semibold">{titles[view]}</h1>
         {view === 'scan' && <ScanView accessToken={accessToken} />}
-        {view === 'card' && <MemberCard customerId={customer.id} email={customer.email} size="full" />}
+        {view === 'card' && (
+          <div className="flex flex-col gap-4">
+            <MemberCard customerId={customer.id} email={customer.email} size="full" />
+            <p className="text-center text-sm text-text-secondary">{t('home.showQrToStaff')}</p>
+          </div>
+        )}
         {view === 'redeem' && wallet && accessToken && (
           <FreeCertificateRequestSection balance={wallet.balance} cost={wallet.freeCertificateCost} accessToken={accessToken} />
         )}
