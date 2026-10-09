@@ -65,6 +65,25 @@ button:not(:disabled),
   cursor: pointer;
 }
 
+/* Myanmar script stacks combining marks (vowel signs, medials, tone marks)
+   above and below the base character, needing far more vertical room than
+   Latin text — Tailwind's tight display-heading line-heights (e.g.
+   leading-[1.05] on the landing hero, or the default line-height paired
+   into text-3xl/text-4xl utilities) were tuned for Latin and cause mark/line
+   collisions once Burmese is active. <html lang> is kept in sync with the
+   active language by language-store.ts specifically so this can target it.
+   This file isn't wrapped in a Tailwind @layer, so — regardless of
+   selector order or specificity — it overrides Tailwind's own layered
+   utility classes (unlayered rules always win over layered ones); unitless
+   so it scales with each element's own font-size at every breakpoint. */
+:lang(my) h1,
+:lang(my) h2,
+:lang(my) h3,
+:lang(my) h4,
+:lang(my) p {
+  line-height: 1.65;
+}
+
 /* Landing-page hero motion — a single staggered reveal on load (each
    element's own `animation-delay`, set via inline style/Tailwind arbitrary
    values where used) plus a slow light-sweep across the facet graphic,

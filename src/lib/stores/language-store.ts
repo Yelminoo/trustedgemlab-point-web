@@ -32,12 +32,14 @@ export const useLanguageStore = create<LanguageState>((set) => ({
       language = navigator.language?.startsWith('my') ? 'my' : 'en';
     }
     void i18next.changeLanguage(language);
+    document.documentElement.lang = language;
     set({ language, hydrated: true });
   },
 
   setLanguage: (language) => {
     localStorage.setItem(LANGUAGE_KEY, language);
     void i18next.changeLanguage(language);
+    document.documentElement.lang = language;
     set({ language });
   },
 }));
