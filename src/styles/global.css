@@ -74,14 +74,28 @@ button:not(:disabled),
    active language by language-store.ts specifically so this can target it.
    This file isn't wrapped in a Tailwind @layer, so — regardless of
    selector order or specificity — it overrides Tailwind's own layered
-   utility classes (unlayered rules always win over layered ones); unitless
-   so it scales with each element's own font-size at every breakpoint. */
+   utility classes (unlayered rules always win over layered ones). */
 :lang(my) h1,
 :lang(my) h2,
 :lang(my) h3,
 :lang(my) h4,
 :lang(my) p {
-  line-height: 1.65;
+  line-height: 1.5;
+}
+
+/* Burmese glyphs also run visually wider/taller than Latin at the same
+   font-size, so the landing display headings (sized for a short English
+   headline) wrap into far more lines than intended once Burmese is active —
+   e.g. the hero h1 (text-[2.75rem] sm:text-6xl lg:text-[4rem], meant to be
+   2-3 lines) was running 5 lines of Burmese. clamp() instead of Tailwind's
+   fixed per-breakpoint sizes so it scales smoothly with viewport width
+   rather than jumping at sm/lg. */
+:lang(my) h1 {
+  font-size: clamp(1.75rem, 1.2rem + 3vw, 3.25rem);
+}
+
+:lang(my) h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.6vw, 2.25rem);
 }
 
 /* Landing-page hero motion — a single staggered reveal on load (each
