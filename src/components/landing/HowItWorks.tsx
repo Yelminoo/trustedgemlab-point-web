@@ -12,7 +12,7 @@ export function HowItWorks() {
   return (
     <section className="border-y border-bg-selected/60 bg-bg-element/50">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-        <h2 className="font-display mb-10 text-3xl font-semibold sm:text-4xl">{t('landing.howItWorksHeading')}</h2>
+        <h2 className="font-display text-balance mb-10 text-3xl font-semibold sm:text-4xl">{t('landing.howItWorksHeading')}</h2>
         <div className="grid gap-8 sm:grid-cols-3 sm:gap-6">
           {steps.map((s, i) => (
             <div key={s.n} className="relative">

@@ -15,7 +15,7 @@ export function FeaturesSection() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
       <div className="mb-10 max-w-lg">
-        <h2 className="font-display text-3xl font-semibold sm:text-4xl">{t('landing.featuresHeading')}</h2>
+        <h2 className="font-display text-balance text-3xl font-semibold sm:text-4xl">{t('landing.featuresHeading')}</h2>
         <p className="mt-3 text-text-secondary">{t('landing.featuresSubheading')}</p>
       </div>
 
