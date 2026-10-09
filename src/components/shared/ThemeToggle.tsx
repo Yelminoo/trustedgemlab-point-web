@@ -19,11 +19,21 @@ function applyTheme(theme: Theme) {
   localStorage.setItem(STORAGE_KEY, theme);
 }
 
-// Lazy useState init reads the attribute the blocking inline script in
-// BaseLayout already set before first paint — this never causes a
-// hydration-mismatch flash, it just picks up what's already there.
+// Starts at the same 'light' default the server renders (SSR has no
+// `document` at all, so currentTheme() always returns 'light' there) — a
+// lazy initializer that reads the DOM immediately would get the *real*
+// theme during client hydration (already applied by BaseLayout's blocking
+// inline script) and mismatch the static markup, which React treats as an
+// error and discards/re-renders the whole tree. Syncing in an effect
+// instead is safe because effects only run after hydration completes, so
+// this is just a normal re-render, not a mismatch — the visible flash (if
+// the real theme is dark) is one commit, effectively imperceptible.
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => currentTheme());
+  const [theme, setTheme] = useState<Theme>('light');
+
+  useEffect(() => {
+    setTheme(currentTheme());
+  }, []);
 
   // Follow the OS setting live if the user hasn't made an explicit choice
   // yet on THIS device (nothing in localStorage) — e.g. they change their
