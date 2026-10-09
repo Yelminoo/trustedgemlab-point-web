@@ -26,7 +26,7 @@
     "cardTitle": "အသင်းဝင်ကတ်",
     "redeemTitle": "အခမဲ့ Gem Report",
     "reportNotFoundScanned": "စကင်ဖတ်ထားသော ကုဒ် \"{{code}}\" အတွက် Report ကို ရှာမတွေ့ပါ။",
-    "yoursConfirmed": "✓ ဤ Report သည် သင့်ပိုင်ဖြစ်သည်",
+    "yoursConfirmed": "✓ Report အတည်ပြုပြီးပါပြီ",
     "scanAnother": "နောက်တစ်ခု စကင်ဖတ်ရန်",
     "showQrToStaff": "ဝန်ထမ်းများက သင့်အကောင့်ကို ရှာဖွေနိုင်ရန် ဤ QR ကို ပြပါ။"
   },

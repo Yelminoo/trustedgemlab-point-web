@@ -26,7 +26,7 @@
     "cardTitle": "Member Card",
     "redeemTitle": "Free Gem Report",
     "reportNotFoundScanned": "Report not found for scanned code \"{{code}}\".",
-    "yoursConfirmed": "✓ This report is yours",
+    "yoursConfirmed": "✓ Report verified",
     "scanAnother": "Scan Another",
     "showQrToStaff": "Show this QR to staff so they can look up your account."
   },
