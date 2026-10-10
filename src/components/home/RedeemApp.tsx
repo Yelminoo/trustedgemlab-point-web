@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useWallet } from '@/lib/api/wallet';
 import { FreeCertificateRequestSection } from '@/components/home/FreeCertificateRequestSection';
 import { GateLoading } from '@/components/shared/GateLoading';
+import { RequireVerifiedEmail } from '@/components/shared/RequireVerifiedEmail';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuthGate } from '@/lib/use-auth-gate';
 
@@ -13,6 +14,13 @@ function RedeemInner() {
   const { data: wallet } = useWallet(accessToken);
 
   if (!ready || !customer || !accessToken) return <GateLoading />;
+  if (!customer.isEmailVerified) {
+    return (
+      <RequireVerifiedEmail customer={customer} accessToken={accessToken}>
+        <></>
+      </RequireVerifiedEmail>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-md">

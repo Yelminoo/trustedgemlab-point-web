@@ -6,6 +6,7 @@ import { ApiError } from '@/lib/api/client';
 import { useCertificateLookup, useMyCertificates } from '@/lib/api/certificates';
 import { CertificateCard } from '@/components/shared/CertificateCard';
 import { GateLoading } from '@/components/shared/GateLoading';
+import { RequireVerifiedEmail } from '@/components/shared/RequireVerifiedEmail';
 import { Button, TextField } from '@/components/shared/ui';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuthGate } from '@/lib/use-auth-gate';
@@ -20,6 +21,13 @@ function CertificatesInner() {
   const notFound = error instanceof ApiError && error.status === 404;
 
   if (!ready || !customer) return <GateLoading />;
+  if (!customer.isEmailVerified) {
+    return (
+      <RequireVerifiedEmail customer={customer} accessToken={accessToken}>
+        <></>
+      </RequireVerifiedEmail>
+    );
+  }
 
   return (
     <div className="mx-auto flex max-w-md flex-col gap-8">

@@ -6,6 +6,7 @@ import { MembersView } from '@/components/admin/MembersView';
 import { NotifyView } from '@/components/admin/NotifyView';
 import { RequestsView } from '@/components/admin/RequestsView';
 import { GateLoading } from '@/components/shared/GateLoading';
+import { RequireVerifiedEmail } from '@/components/shared/RequireVerifiedEmail';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuthGate } from '@/lib/use-auth-gate';
 
@@ -22,6 +23,13 @@ function AdminInner() {
   const [view, setView] = useState<View>('members');
 
   if (!ready || !customer) return <GateLoading />;
+  if (!customer.isEmailVerified) {
+    return (
+      <RequireVerifiedEmail customer={customer} accessToken={accessToken}>
+        <></>
+      </RequireVerifiedEmail>
+    );
+  }
 
   // Signed in, but not an admin — this is an authorization message, not a
   // redirect: unlike "not signed in at all" (handled by useAuthGate above),

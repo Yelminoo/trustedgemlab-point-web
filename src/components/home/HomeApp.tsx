@@ -10,6 +10,7 @@ import { FreeCertificateRequestSection } from '@/components/home/FreeCertificate
 import { MemberCard } from '@/components/home/MemberCard';
 import { GateLoading } from '@/components/shared/GateLoading';
 import { QrScanner } from '@/components/shared/QrScanner';
+import { RequireVerifiedEmail } from '@/components/shared/RequireVerifiedEmail';
 import { Button } from '@/components/shared/ui';
 import { getQueryClient } from '@/lib/query-client';
 import { useAuthGate } from '@/lib/use-auth-gate';
@@ -23,6 +24,13 @@ function HomeInner() {
   const { data: wallet } = useWallet(accessToken);
 
   if (!ready || !customer) return <GateLoading />;
+  if (!customer.isEmailVerified) {
+    return (
+      <RequireVerifiedEmail customer={customer} accessToken={accessToken}>
+        <></>
+      </RequireVerifiedEmail>
+    );
+  }
 
   if (view !== 'dashboard') {
     const titles: Record<Exclude<View, 'dashboard'>, string> = {
