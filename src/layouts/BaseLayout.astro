@@ -25,6 +25,15 @@ const {
   description = 'Trusted Gemological Laboratory — gem reports, points, and rewards.',
   fullBleed = false,
 } = Astro.props;
+
+// Social platforms (Facebook, Twitter/X, Slack, iMessage, etc.) require
+// og:image/og:url to be absolute URLs — a relative /og-image.png is simply
+// ignored by most link-preview crawlers. Hardcoded rather than read from
+// Astro.site because this project doesn't set `site` in astro.config.mjs.
+const SITE_URL = 'https://point.trustedgemlab.com';
+const pageUrl = new URL(Astro.url.pathname, SITE_URL).toString();
+const ogImageUrl = new URL('/og-image.png', SITE_URL).toString();
+const fullTitle = `${title} · Trusted Gemlab`;
 ---
 
 <!doctype html>
@@ -70,7 +79,23 @@ const {
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
     />
     <meta name="description" content={description} />
-    <title>{title} · Trusted Gemlab</title>
+    <title>{fullTitle}</title>
+    <link rel="canonical" href={pageUrl} />
+
+    <!-- ===== Social share (Open Graph / Twitter Card) ===== -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Trusted Gemlab" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Trusted Gemological Laboratory" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- ===== PWA ===== -->
     <link rel="manifest" href="/manifest.webmanifest" />
