@@ -108,8 +108,24 @@ function ScanView({ accessToken }: { accessToken: string | null }) {
   const { data: certificate, error } = useCertificateLookup(scannedCertNo, accessToken);
   const notFound = error instanceof ApiError && error.status === 404;
 
+  // Printed report QR codes encode a link to the internal admin tool's own
+  // public verification page (web-internal/gv-certificate's
+  // /certificate/qr-preview — already unauthenticated, see its
+  // middleware.ts), not the plain report number — opening it is simpler and
+  // less invasive than teaching this app to parse that page's URL/base64
+  // payload shape, and keeps working even if that shape changes later.
+  // A bare report number (no older/alternate QR source currently in use)
+  // still falls through to the existing in-app lookup.
+  function handleScan(text: string) {
+    if (/^https?:\/\//i.test(text)) {
+      window.open(text, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    setScannedCertNo(text);
+  }
+
   if (!scannedCertNo) {
-    return <QrScanner elementId="home-cert-scanner" onScan={setScannedCertNo} />;
+    return <QrScanner elementId="home-cert-scanner" onScan={handleScan} />;
   }
 
   return (
